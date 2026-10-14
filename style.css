@@ -104,3 +104,10 @@ h2{font-size:clamp(1.7rem,3.4vw,2.6rem)}h3{font-size:1.15rem}
 .band{background:var(--sand);padding:46px 0}.band-in{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
 .band h2{font-size:1.6rem;color:var(--black)}.band .btn:hover{background:#fff;border-color:#fff;color:var(--black)}
 @media(max-width:900px){.menu a.btn-sm{align-self:flex-start}}
+/* accueil */
+.more-wrap{text-align:center;margin-top:44px}
+.gallery.g3{grid-template-columns:repeat(3,1fr);grid-auto-rows:260px}
+.btn-ghost-w{background:transparent;color:#fff;border-color:#fff}.dark .btn-ghost-w:hover{background:#fff;color:var(--black)}
+.center{text-align:center}.cta-final p{color:#bdb6ab;margin:14px 0 28px}.cta-final .cta{justify-content:center}
+@media(max-width:900px){.gallery.g3{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.gallery.g3{grid-template-columns:1fr}}
