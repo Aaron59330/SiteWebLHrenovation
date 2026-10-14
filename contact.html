@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Contactez-nous – L.H Rénovation</title>
+<meta name="description" content="Devis gratuit, réponse sous 24h.">
+<meta name="theme-color" content="#0b0b0b">
+<link rel="icon" href="assets/favicon.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="header" id="top">
+  <div class="container nav">
+    <a href="index.html" class="brand"><img src="assets/logo.png" alt="L.H Rénovation – accueil"></a>
+    <button class="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    <nav class="menu">
+      <a href="services.html">Services</a>
+      <a href="realisations.html">Réalisations</a>
+      <a href="pourquoi-nous.html">Pourquoi nous</a>
+      <a href="methode.html">Méthode</a>
+      <a href="avis.html">Avis</a>
+      <a href="contact.html" class="btn btn-sm">Devis gratuit</a>
+    </nav>
+  </div>
+</header>
+<main>
+<section class="banner"><div class="container"><nav class="crumb"><a href="index.html">Accueil</a> / Contact</nav><h1>Contactez-nous</h1><p>Devis gratuit, réponse sous 24h.</p></div></section>
+<section class="section dark" id="contact">
+  <div class="container split">
+    <div class="head left">
+      <h2>Obtenez votre devis gratuit</h2>
+      <p>Décrivez votre projet, nous revenons vers vous sous 24h.</p>
+      <ul class="infos">
+        <li><b>Téléphone</b><a href="tel:+33600000000">06 00 00 00 00</a></li>
+        <li><b>E-mail</b><a href="mailto:contact@lhrenovation.fr">contact@lhrenovation.fr</a></li>
+        <li><b>Zone d'intervention</b>Votre ville et ses alentours</li>
+        <li><b>Horaires</b>Lun – Sam : 8h – 19h</li>
+      </ul>
+    </div>
+    <form class="form" id="form" action="mailto:contact@lhrenovation.fr" method="post" enctype="text/plain">
+      <label>Nom<input name="nom" required autocomplete="name"></label>
+      <label>Téléphone<input name="tel" type="tel" required autocomplete="tel"></label>
+      <label>E-mail<input name="email" type="email" autocomplete="email"></label>
+      <label>Type de travaux
+        <select name="type"><option>Peinture</option><option>Rénovation complète</option><option>Plâtrerie</option><option>Sols / carrelage</option><option>Salle de bain</option><option>Cuisine</option><option>Autre</option></select>
+      </label>
+      <label>Votre projet<textarea name="message" rows="4" required></textarea></label>
+      <button class="btn" type="submit">Envoyer ma demande</button>
+    </form>
+  </div>
+</section></main>
+<footer class="footer">
+  <div class="container foot">
+    <img src="assets/logo.png" alt="L.H Rénovation">
+    <nav><a href="services.html">Services</a><a href="realisations.html">Réalisations</a><a href="pourquoi-nous.html">Pourquoi nous</a><a href="methode.html">Méthode</a><a href="avis.html">Avis</a><a href="contact.html">Contact</a><a href="mentions-legales.html">Mentions légales</a></nav>
+    <p>© <span id="y"></span> L.H Rénovation – Tous droits réservés</p>
+  </div>
+</footer>
+<a href="tel:+33600000000" class="callfab" aria-label="Appeler"><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></svg></a>
+<script src="script.js"></script>
+</body>
+</html>

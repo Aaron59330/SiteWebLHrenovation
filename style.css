@@ -94,3 +94,13 @@ h2{font-size:clamp(1.7rem,3.4vw,2.6rem)}h3{font-size:1.15rem}
 @media(max-width:560px){.cards,.three,.steps,.gallery{grid-template-columns:1fr}.gallery{grid-auto-rows:220px}.tile.big{grid-row:auto}.brand img{height:48px}}
 .foot img{background:#fff;border-radius:12px;padding:10px 18px;height:90px}
 .hero-visual img{margin:auto}
+/* pages */
+.menu a.active:not(.btn){color:var(--sand-d)}.menu a.active:not(.btn)::after{width:100%}
+.banner{background:var(--black);color:#fff;padding:70px 0 64px;position:relative;overflow:hidden;border-bottom:4px solid var(--sand)}
+.banner::after{content:"";position:absolute;right:-80px;top:-80px;width:340px;height:340px;border-radius:50%;background:radial-gradient(var(--sand),transparent 70%);opacity:.25}
+.banner h1{font-size:clamp(2rem,4.5vw,3.2rem);position:relative}.banner p{color:#cfc8bc;margin-top:12px;position:relative}
+.crumb{font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--sand);margin-bottom:14px;position:relative}.crumb a:hover{text-decoration:underline}
+.card.link{display:block}.card.link .more{display:inline-block;margin-top:16px;font-weight:700;font-size:.85rem;color:var(--sand-d)}
+.band{background:var(--sand);padding:46px 0}.band-in{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.band h2{font-size:1.6rem;color:var(--black)}.band .btn:hover{background:#fff;border-color:#fff;color:var(--black)}
+@media(max-width:900px){.menu a.btn-sm{align-self:flex-start}}
