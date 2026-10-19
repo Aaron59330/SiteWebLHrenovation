@@ -10,7 +10,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20261021">
+<link rel="stylesheet" href="style.css?v=20261022">
+<script src="content.js?v=20261022"></script>
 </head>
 <body>
 <header class="header" id="top">
@@ -18,41 +19,40 @@
     <a href="index.html" class="brand"><img src="assets/logo.png" alt="L.H Rénovation – accueil"></a>
     <button class="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
     <nav class="menu">
-      <a href="index.html">Accueil</a>
-      <a href="services.html">Services</a>
-      <a href="realisations.html">Réalisations</a>
-      <a href="pourquoi-nous.html">Pourquoi nous</a>
-      <a href="methode.html">Méthode</a>
-      <a href="avis.html">Avis</a>
+      <a href="index.html" data-k="nav.accueil">Accueil</a>
+      <a href="services.html" data-k="nav.services">Services</a>
+      <a href="realisations.html" data-k="nav.realisations">Réalisations</a>
+      <a href="pourquoi-nous.html" data-k="nav.pourquoi-nous">Pourquoi nous</a>
+      <a href="methode.html" data-k="nav.methode">Méthode</a>
+      <a href="avis.html" data-k="nav.avis">Avis</a>
       <a href="compte.html" id="nav-account">Mon compte</a>
-      <a href="contact.html" class="btn btn-sm">Devis gratuit</a>
+      <a href="contact.html" class="btn btn-sm" data-k="nav.devis-gratuit">Devis gratuit</a>
     </nav>
   </div>
 </header>
 <main>
-<section class="banner"><div class="container"><nav class="crumb"><a href="index.html">Accueil</a> / Contact</nav><h1>Contactez-nous</h1><p>Devis gratuit, réponse sous 24h.</p></div></section>
+<section class="banner"><div class="container"><nav class="crumb"><a href="index.html" data-k="contact.a.1">Accueil</a> / Contact</nav><h1 data-k="contact.h1.1">Contactez-nous</h1><p data-k="contact.p.1">Devis gratuit, réponse sous 24h.</p></div></section>
 <section class="section dark" id="contact">
   <div class="container split">
     <div class="head left">
-      <h2>Obtenez votre devis gratuit</h2>
-      <p>Décrivez votre projet, nous revenons vers vous sous 24h.</p>
+      <h2 data-k="contact.h2.1">Obtenez votre devis gratuit</h2>
+      <p data-k="contact.p.2">Décrivez votre projet, nous revenons vers vous sous 24h.</p>
       <ul class="infos">
-        <li><b>Téléphone</b><a href="tel:+33786244154">07 86 24 41 54</a></li>
-        <li><b>E-mail</b><a href="mailto:lhrenovation.int@gmail.com">lhrenovation.int@gmail.com</a></li>
-        <li><b>Zone d'intervention</b>Hautmont et ses alentours</li>
-        <li><b>Horaires</b>Lun – Sam : 8h – 19h</li>
+        <li><b data-k="contact.b.1">Téléphone</b><a href="tel:+33786244154" data-k="contact.phone">07 86 24 41 54</a></li>
+        <li><b data-k="contact.b.2">E-mail</b><a href="mailto:lhrenovation.int@gmail.com" data-k="contact.email">lhrenovation.int@gmail.com</a></li>
+        <li><b data-k="contact.b.3">Zone d'intervention</b><span data-k="contact.span.1">Hautmont et ses alentours</span></li>
+        <li><b data-k="contact.b.4">Horaires</b><span data-k="contact.span.2">Lun – Sam : 8h – 19h</span></li>
       </ul>
     </div>
     <form class="form" id="quote-form" novalidate>
-      <label>Nom<input name="name" required maxlength="100" autocomplete="name"></label>
-      <label>Téléphone<input name="phone" type="tel" required maxlength="30" autocomplete="tel"></label>
-      <label>E-mail (facultatif)<input name="email" type="email" maxlength="200" autocomplete="email"></label>
-      <label>Type de travaux
-        <select name="work_type"><option>Peinture</option><option>Rénovation complète</option><option>Plâtrerie</option><option>Sols / carrelage</option><option>Salle de bain</option><option>Cuisine</option><option>Autre</option></select>
+      <label><span data-k="contact.span.3">Nom</span><input name="name" required maxlength="100" autocomplete="name"></label>
+      <label><span data-k="contact.span.4">Téléphone</span><input name="phone" type="tel" required maxlength="30" autocomplete="tel"></label>
+      <label><span data-k="contact.span.5">E-mail (facultatif)</span><input name="email" type="email" maxlength="200" autocomplete="email"></label>
+      <label><span data-k="contact.span.6">Type de travaux</span><select name="work_type"><option>Peinture</option><option>Rénovation complète</option><option>Plâtrerie</option><option>Sols / carrelage</option><option>Salle de bain</option><option>Cuisine</option><option>Autre</option></select>
       </label>
-      <label>Votre projet<textarea name="message" rows="4" required maxlength="3000" placeholder="Pièces concernées, surface, délais souhaités…"></textarea></label>
+      <label><span data-k="contact.span.7">Votre projet</span><textarea name="message" rows="4" required maxlength="3000" placeholder="Pièces concernées, surface, délais souhaités…"></textarea></label>
       <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
-      <button class="btn" type="submit">Envoyer ma demande</button>
+      <button class="btn" type="submit" data-k="contact.button.1">Envoyer ma demande</button>
       <p class="form-msg" id="quote-msg" role="status"></p>
     </form>
   </div>
@@ -60,12 +60,12 @@
 <footer class="footer">
   <div class="container foot">
     <img src="assets/logo.png" alt="L.H Rénovation">
-    <nav><a href="services.html">Services</a><a href="realisations.html">Réalisations</a><a href="pourquoi-nous.html">Pourquoi nous</a><a href="methode.html">Méthode</a><a href="avis.html">Avis</a><a href="contact.html">Contact</a><a href="compte.html">Mon compte</a><a href="mentions-legales.html">Mentions légales</a></nav>
-    <p>© <span id="y"></span> L.H Rénovation – Tous droits réservés</p>
+    <nav><a href="services.html" data-k="nav.services">Services</a><a href="realisations.html" data-k="nav.realisations">Réalisations</a><a href="pourquoi-nous.html" data-k="nav.pourquoi-nous">Pourquoi nous</a><a href="methode.html" data-k="nav.methode">Méthode</a><a href="avis.html" data-k="nav.avis">Avis</a><a href="contact.html" data-k="nav.contact">Contact</a><a href="compte.html" data-k="nav.mon-compte">Mon compte</a><a href="mentions-legales.html" data-k="nav.mentions-legales">Mentions légales</a></nav>
+    <p>© <span id="y"></span> <span data-k="footer.l-h-renovation-tous-droits-res">L.H Rénovation – Tous droits réservés</span></p>
   </div>
 </footer>
 <a href="tel:+33786244154" class="callfab" aria-label="Appeler"><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></svg></a>
-<script src="script.js?v=20261021"></script>
-<script src="quote.js?v=20261021"></script>
+<script src="script.js?v=20261022"></script>
+<script src="quote.js?v=20261022"></script>
 </body>
 </html>

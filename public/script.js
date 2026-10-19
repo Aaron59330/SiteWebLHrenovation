@@ -29,6 +29,7 @@ window.LH = {
       LH.el('strong', { text: 'Mode administrateur' }), LH.el('span', { id: 'ab-info', text: '' }),
       LH.el('a', { href: 'admin.html', text: 'Ouvrir l\'administration →' })));
     document.body.insertBefore(bar, document.body.firstChild);
+    document.dispatchEvent(new CustomEvent('lh-adminbar', { detail: { inner: bar.firstChild, link: bar.firstChild.lastChild } }));
     LH.api('GET', '/api/admin/summary').then(function (c) {
       document.getElementById('ab-info').textContent = c.newQuotes + ' devis à traiter · ' + c.pendingReviews + ' avis à valider · ' + c.users + ' client' + (c.users > 1 ? 's' : '');
     }).catch(function () {});

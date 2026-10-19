@@ -10,7 +10,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20261021">
+<link rel="stylesheet" href="style.css?v=20261022">
+<script src="content.js?v=20261022"></script>
 </head>
 <body>
 <header class="header" id="top">
@@ -18,40 +19,40 @@
     <a href="index.html" class="brand"><img src="assets/logo.png" alt="L.H Rénovation – accueil"></a>
     <button class="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
     <nav class="menu">
-      <a href="index.html">Accueil</a>
-      <a href="services.html">Services</a>
-      <a href="realisations.html">Réalisations</a>
-      <a href="pourquoi-nous.html">Pourquoi nous</a>
-      <a href="methode.html" class="active">Méthode</a>
-      <a href="avis.html">Avis</a>
+      <a href="index.html" data-k="nav.accueil">Accueil</a>
+      <a href="services.html" data-k="nav.services">Services</a>
+      <a href="realisations.html" data-k="nav.realisations">Réalisations</a>
+      <a href="pourquoi-nous.html" data-k="nav.pourquoi-nous">Pourquoi nous</a>
+      <a href="methode.html" class="active" data-k="nav.methode">Méthode</a>
+      <a href="avis.html" data-k="nav.avis">Avis</a>
       <a href="compte.html" id="nav-account">Mon compte</a>
-      <a href="contact.html" class="btn btn-sm">Devis gratuit</a>
+      <a href="contact.html" class="btn btn-sm" data-k="nav.devis-gratuit">Devis gratuit</a>
     </nav>
   </div>
 </header>
 <main>
-<section class="banner"><div class="container"><nav class="crumb"><a href="index.html">Accueil</a> / Méthode</nav><h1>Notre méthode</h1><p>De la première prise de contact à la livraison.</p></div></section>
+<section class="banner"><div class="container"><nav class="crumb"><a href="index.html" data-k="methode.a.1">Accueil</a> / Méthode</nav><h1 data-k="methode.h1.1">Notre méthode</h1><p data-k="methode.p.1">De la première prise de contact à la livraison.</p></div></section>
 <section class="section sand" id="methode">
   <div class="container">
-    <div class="head"><h2>Votre projet en 4 étapes</h2></div>
+    <div class="head"><h2 data-k="methode.h2.1">Votre projet en 4 étapes</h2></div>
     <ol class="steps">
-      <li><span>01</span><h3>Contact</h3><p>Vous nous décrivez votre projet par téléphone ou via le formulaire.</p></li>
-      <li><span>02</span><h3>Visite & devis</h3><p>Nous nous déplaçons, prenons les mesures et établissons un devis gratuit.</p></li>
-      <li><span>03</span><h3>Travaux</h3><p>Réalisation du chantier selon le planning convenu.</p></li>
-      <li><span>04</span><h3>Livraison</h3><p>Contrôle final avec vous, chantier nettoyé, projet livré.</p></li>
+      <li><span>01</span><h3 data-k="methode.h3.1">Contact</h3><p data-k="methode.p.2">Vous nous décrivez votre projet par téléphone ou via le formulaire.</p></li>
+      <li><span>02</span><h3 data-k="methode.h3.2">Visite & devis</h3><p data-k="methode.p.3">Nous nous déplaçons, prenons les mesures et établissons un devis gratuit.</p></li>
+      <li><span>03</span><h3 data-k="methode.h3.3">Travaux</h3><p data-k="methode.p.4">Réalisation du chantier selon le planning convenu.</p></li>
+      <li><span>04</span><h3 data-k="methode.h3.4">Livraison</h3><p data-k="methode.p.5">Contrôle final avec vous, chantier nettoyé, projet livré.</p></li>
     </ol>
   </div>
 </section>
-<section class="band"><div class="container band-in"><h2>Un projet de rénovation ?</h2><a href="contact.html" class="btn">Demander un devis gratuit</a></div></section>
+<section class="band"><div class="container band-in"><h2 data-k="shared.band.title">Un projet de rénovation ?</h2><a href="contact.html" class="btn" data-k="shared.band.btn">Demander un devis gratuit</a></div></section>
 </main>
 <footer class="footer">
   <div class="container foot">
     <img src="assets/logo.png" alt="L.H Rénovation">
-    <nav><a href="services.html">Services</a><a href="realisations.html">Réalisations</a><a href="pourquoi-nous.html">Pourquoi nous</a><a href="methode.html">Méthode</a><a href="avis.html">Avis</a><a href="contact.html">Contact</a><a href="compte.html">Mon compte</a><a href="mentions-legales.html">Mentions légales</a></nav>
-    <p>© <span id="y"></span> L.H Rénovation – Tous droits réservés</p>
+    <nav><a href="services.html" data-k="nav.services">Services</a><a href="realisations.html" data-k="nav.realisations">Réalisations</a><a href="pourquoi-nous.html" data-k="nav.pourquoi-nous">Pourquoi nous</a><a href="methode.html" data-k="nav.methode">Méthode</a><a href="avis.html" data-k="nav.avis">Avis</a><a href="contact.html" data-k="nav.contact">Contact</a><a href="compte.html" data-k="nav.mon-compte">Mon compte</a><a href="mentions-legales.html" data-k="nav.mentions-legales">Mentions légales</a></nav>
+    <p>© <span id="y"></span> <span data-k="footer.l-h-renovation-tous-droits-res">L.H Rénovation – Tous droits réservés</span></p>
   </div>
 </footer>
 <a href="tel:+33786244154" class="callfab" aria-label="Appeler"><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></svg></a>
-<script src="script.js?v=20261021"></script>
+<script src="script.js?v=20261022"></script>
 </body>
 </html>

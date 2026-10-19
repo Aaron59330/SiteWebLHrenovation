@@ -10,7 +10,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20261021">
+<link rel="stylesheet" href="style.css?v=20261022">
+<script src="content.js?v=20261022"></script>
 </head>
 <body>
 <header class="header" id="top">
@@ -18,14 +19,14 @@
     <a href="index.html" class="brand"><img src="assets/logo.png" alt="L.H Rénovation – accueil"></a>
     <button class="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
     <nav class="menu">
-      <a href="index.html" class="active">Accueil</a>
-      <a href="services.html">Services</a>
-      <a href="realisations.html">Réalisations</a>
-      <a href="pourquoi-nous.html">Pourquoi nous</a>
-      <a href="methode.html">Méthode</a>
-      <a href="avis.html">Avis</a>
+      <a href="index.html" class="active" data-k="nav.accueil">Accueil</a>
+      <a href="services.html" data-k="nav.services">Services</a>
+      <a href="realisations.html" data-k="nav.realisations">Réalisations</a>
+      <a href="pourquoi-nous.html" data-k="nav.pourquoi-nous">Pourquoi nous</a>
+      <a href="methode.html" data-k="nav.methode">Méthode</a>
+      <a href="avis.html" data-k="nav.avis">Avis</a>
       <a href="compte.html" id="nav-account">Mon compte</a>
-      <a href="contact.html" class="btn btn-sm">Devis gratuit</a>
+      <a href="contact.html" class="btn btn-sm" data-k="nav.devis-gratuit">Devis gratuit</a>
     </nav>
   </div>
 </header>
@@ -33,15 +34,15 @@
 <section class="hero">
   <div class="container hero-grid">
     <div class="hero-text">
-      <span class="eyebrow">Entreprise de rénovation</span>
-      <h1>Redonnons vie à <em>votre habitat</em>.</h1>
-      <p>Peinture, plâtrerie, sols, salle de bain, cuisine… L.H Rénovation prend en charge vos travaux de A à Z, avec des finitions soignées et des délais tenus.</p>
+      <span class="eyebrow" data-k="index.span.1">Entreprise de rénovation</span>
+      <h1><span data-k="index.span.2">Redonnons vie à</span> <em data-k="index.em.1">votre habitat.</em></h1>
+      <p data-k="index.p.1">Peinture, plâtrerie, sols, salle de bain, cuisine… L.H Rénovation prend en charge vos travaux de A à Z, avec des finitions soignées et des délais tenus.</p>
       <div class="cta">
-        <a href="contact.html" class="btn">Demander un devis gratuit</a>
-        <a href="realisations.html" class="btn btn-ghost">Voir nos réalisations</a>
+        <a href="contact.html" class="btn" data-k="index.a.1">Demander un devis gratuit</a>
+        <a href="realisations.html" class="btn btn-ghost" data-k="index.a.2">Voir nos réalisations</a>
       </div>
       <ul class="hero-points">
-        <li>Devis gratuit</li><li>Travail soigné</li><li>Délais respectés</li>
+        <li data-k="index.li.1">Devis gratuit</li><li data-k="index.li.2">Travail soigné</li><li data-k="index.li.3">Délais respectés</li>
       </ul>
     </div>
     <div class="hero-visual" aria-hidden="true">
@@ -51,68 +52,68 @@
   </div>
 </section><section class="section" id="services">
   <div class="container">
-    <div class="head"><h2>Tous vos travaux de rénovation</h2><p>Un seul interlocuteur pour des travaux cohérents, propres et durables.</p></div>
+    <div class="head"><h2 data-k="index.h2.1">Tous vos travaux de rénovation</h2><p data-k="index.p.2">Un seul interlocuteur pour des travaux cohérents, propres et durables.</p></div>
     <div class="cards">
-      <article class="card"><div class="ico"><svg viewBox="0 0 24 24"><path d="M4 4h12v5H4zM16 6.5h3v6H11v3M11 15.5V21"/></svg></div><h3>Peinture</h3><p>Murs, plafonds, boiseries, façades. Préparation des supports et finitions impeccables.</p></article>
-      <article class="card"><div class="ico"><svg viewBox="0 0 24 24"><path d="M3 20h18M5 20V9l7-5 7 5v11M9 20v-6h6v6"/></svg></div><h3>Rénovation complète</h3><p>Appartement ou maison : de la démolition aux finitions, nous coordonnons tout le chantier.</p></article>
-      <article class="card"><div class="ico"><svg viewBox="0 0 24 24"><path d="M3 5l7 7M8 3l-5 5 13 13 5-5zM14 9l1.5 1.5"/></svg></div><h3>Plâtrerie & cloisons</h3><p>Plaques de plâtre, enduits, faux plafonds, isolation et création de cloisons.</p></article>
-      <article class="card"><div class="ico"><svg viewBox="0 0 24 24"><path d="M3 3h18v18H3zM3 12h18M12 3v18"/></svg></div><h3>Sols & carrelage</h3><p>Carrelage, parquet, stratifié, vinyle : pose précise et durable pour toutes les pièces.</p></article>
-      <article class="card"><div class="ico"><svg viewBox="0 0 24 24"><path d="M4 12h16v4a4 4 0 01-4 4H8a4 4 0 01-4-4zM6 12V6a2 2 0 014 0M7 20v2M17 20v2"/></svg></div><h3>Salle de bain</h3><p>Création ou rénovation : douche à l'italienne, faïence, meubles, plomberie et électricité.</p></article>
-      <article class="card"><div class="ico"><svg viewBox="0 0 24 24"><path d="M4 3h16v18H4zM4 10h16M8 6h1M8 14v3"/></svg></div><h3>Cuisine</h3><p>Aménagement et rénovation de cuisine, pose de meubles, plans de travail et crédences.</p></article>
+      <article class="card"><div class="ico"><svg viewBox="0 0 24 24"><path d="M4 4h12v5H4zM16 6.5h3v6H11v3M11 15.5V21"/></svg></div><h3 data-k="index.h3.1">Peinture</h3><p data-k="index.p.3">Murs, plafonds, boiseries, façades. Préparation des supports et finitions impeccables.</p></article>
+      <article class="card"><div class="ico"><svg viewBox="0 0 24 24"><path d="M3 20h18M5 20V9l7-5 7 5v11M9 20v-6h6v6"/></svg></div><h3 data-k="index.h3.2">Rénovation complète</h3><p data-k="index.p.4">Appartement ou maison : de la démolition aux finitions, nous coordonnons tout le chantier.</p></article>
+      <article class="card"><div class="ico"><svg viewBox="0 0 24 24"><path d="M3 5l7 7M8 3l-5 5 13 13 5-5zM14 9l1.5 1.5"/></svg></div><h3 data-k="index.h3.3">Plâtrerie & cloisons</h3><p data-k="index.p.5">Plaques de plâtre, enduits, faux plafonds, isolation et création de cloisons.</p></article>
+      <article class="card"><div class="ico"><svg viewBox="0 0 24 24"><path d="M3 3h18v18H3zM3 12h18M12 3v18"/></svg></div><h3 data-k="index.h3.4">Sols & carrelage</h3><p data-k="index.p.6">Carrelage, parquet, stratifié, vinyle : pose précise et durable pour toutes les pièces.</p></article>
+      <article class="card"><div class="ico"><svg viewBox="0 0 24 24"><path d="M4 12h16v4a4 4 0 01-4 4H8a4 4 0 01-4-4zM6 12V6a2 2 0 014 0M7 20v2M17 20v2"/></svg></div><h3 data-k="index.h3.5">Salle de bain</h3><p data-k="index.p.7">Création ou rénovation : douche à l'italienne, faïence, meubles, plomberie et électricité.</p></article>
+      <article class="card"><div class="ico"><svg viewBox="0 0 24 24"><path d="M4 3h16v18H4zM4 10h16M8 6h1M8 14v3"/></svg></div><h3 data-k="index.h3.6">Cuisine</h3><p data-k="index.p.8">Aménagement et rénovation de cuisine, pose de meubles, plans de travail et crédences.</p></article>
     </div>
-  <div class="more-wrap"><a href="services.html" class="btn">Voir tous nos services</a></div>
+  <div class="more-wrap"><a href="services.html" class="btn" data-k="index.a.3">Voir tous nos services</a></div>
   </div>
 </section>
 <section class="section" id="atouts">
   <div class="container split">
-    <div class="head left"><h2>La rigueur d'un artisan, la transparence en plus</h2><p>Chaque chantier est traité comme si c'était le nôtre : propre, organisé et sans mauvaise surprise.</p><a href="pourquoi-nous.html" class="btn">En savoir plus</a></div>
+    <div class="head left"><h2 data-k="index.h2.2">La rigueur d'un artisan, la transparence en plus</h2><p data-k="index.p.9">Chaque chantier est traité comme si c'était le nôtre : propre, organisé et sans mauvaise surprise.</p><a href="pourquoi-nous.html" class="btn" data-k="index.a.4">En savoir plus</a></div>
     <ul class="checks">
-      <li><b>Devis clair et gratuit</b><span>Prix détaillé, sans frais cachés.</span></li>
-      <li><b>Finitions soignées</b><span>Le détail fait la différence.</span></li>
-      <li><b>Délais respectés</b><span>Planning établi et suivi jusqu'à la livraison.</span></li>
-      <li><b>Chantier propre</b><span>Protection des lieux et nettoyage en fin de travaux.</span></li>
-      <li><b>Un interlocuteur unique</b><span>Vous suivez votre projet avec une seule personne.</span></li>
+      <li><b data-k="index.b.1">Devis clair et gratuit</b><span data-k="index.span.3">Prix détaillé, sans frais cachés.</span></li>
+      <li><b data-k="index.b.2">Finitions soignées</b><span data-k="index.span.4">Le détail fait la différence.</span></li>
+      <li><b data-k="index.b.3">Délais respectés</b><span data-k="index.span.5">Planning établi et suivi jusqu'à la livraison.</span></li>
+      <li><b data-k="index.b.4">Chantier propre</b><span data-k="index.span.6">Protection des lieux et nettoyage en fin de travaux.</span></li>
+      <li><b data-k="index.b.5">Un interlocuteur unique</b><span data-k="index.span.7">Vous suivez votre projet avec une seule personne.</span></li>
     </ul>
   </div>
 </section>
 <section class="section dark" id="realisations">
   <div class="container">
-    <div class="head"><h2>Des chantiers qui parlent d'eux-mêmes</h2><p>Un aperçu de nos dernières rénovations.</p></div>
+    <div class="head"><h2 data-k="index.h2.3">Des chantiers qui parlent d'eux-mêmes</h2><p data-k="index.p.10">Un aperçu de nos dernières rénovations.</p></div>
     <div id="real-gallery" class="gallery g3" data-limit="3"></div>
-    <div class="more-wrap"><a href="realisations.html" class="btn">Toutes nos réalisations</a></div>
+    <div class="more-wrap"><a href="realisations.html" class="btn" data-k="index.a.5">Toutes nos réalisations</a></div>
   </div>
 </section>
 <section class="section sand" id="methode">
   <div class="container">
-    <div class="head"><h2>Votre projet en 4 étapes</h2></div>
+    <div class="head"><h2 data-k="index.h2.4">Votre projet en 4 étapes</h2></div>
     <ol class="steps">
-      <li><span>01</span><h3>Contact</h3><p>Vous nous décrivez votre projet par téléphone ou via le formulaire.</p></li>
-      <li><span>02</span><h3>Visite & devis</h3><p>Nous nous déplaçons, prenons les mesures et établissons un devis gratuit.</p></li>
-      <li><span>03</span><h3>Travaux</h3><p>Réalisation du chantier selon le planning convenu.</p></li>
-      <li><span>04</span><h3>Livraison</h3><p>Contrôle final avec vous, chantier nettoyé, projet livré.</p></li>
+      <li><span>01</span><h3 data-k="index.h3.7">Contact</h3><p data-k="index.p.11">Vous nous décrivez votre projet par téléphone ou via le formulaire.</p></li>
+      <li><span>02</span><h3 data-k="index.h3.8">Visite & devis</h3><p data-k="index.p.12">Nous nous déplaçons, prenons les mesures et établissons un devis gratuit.</p></li>
+      <li><span>03</span><h3 data-k="index.h3.9">Travaux</h3><p data-k="index.p.13">Réalisation du chantier selon le planning convenu.</p></li>
+      <li><span>04</span><h3 data-k="index.h3.10">Livraison</h3><p data-k="index.p.14">Contrôle final avec vous, chantier nettoyé, projet livré.</p></li>
     </ol>
-    <div class="more-wrap"><a href="methode.html" class="btn btn-ghost">Découvrir notre méthode</a></div>
+    <div class="more-wrap"><a href="methode.html" class="btn btn-ghost" data-k="index.a.6">Découvrir notre méthode</a></div>
   </div>
 </section>
 <section class="section" id="avis">
   <div class="container">
-    <div class="head"><h2>Ils nous ont fait confiance</h2></div>
+    <div class="head"><h2 data-k="index.h2.5">Ils nous ont fait confiance</h2></div>
     <div id="reviews-list" class="cards three" data-limit="3" aria-live="polite"></div>
-    <div class="more-wrap"><a href="avis.html" class="btn btn-ghost">Lire tous les avis</a></div>
+    <div class="more-wrap"><a href="avis.html" class="btn btn-ghost" data-k="index.a.7">Lire tous les avis</a></div>
   </div>
 </section>
-<section class="section dark cta-final"><div class="container center"><span class="eyebrow">Devis gratuit</span><h2>Parlons de votre projet</h2><p>Décrivez-nous vos travaux, nous vous répondons sous 24h.</p><div class="cta"><a href="contact.html" class="btn">Demander un devis</a><a href="tel:+33786244154" class="btn btn-ghost-w">07 86 24 41 54</a></div></div></section>
+<section class="section dark cta-final"><div class="container center"><span class="eyebrow" data-k="index.span.8">Devis gratuit</span><h2 data-k="index.h2.6">Parlons de votre projet</h2><p data-k="index.p.15">Décrivez-nous vos travaux, nous vous répondons sous 24h.</p><div class="cta"><a href="contact.html" class="btn" data-k="index.a.8">Demander un devis</a><a href="tel:+33786244154" class="btn btn-ghost-w" data-k="contact.phone">07 86 24 41 54</a></div></div></section>
 </main>
 <footer class="footer">
   <div class="container foot">
     <img src="assets/logo.png" alt="L.H Rénovation">
-    <nav><a href="services.html">Services</a><a href="realisations.html">Réalisations</a><a href="pourquoi-nous.html">Pourquoi nous</a><a href="methode.html">Méthode</a><a href="avis.html">Avis</a><a href="contact.html">Contact</a><a href="compte.html">Mon compte</a><a href="mentions-legales.html">Mentions légales</a></nav>
-    <p>© <span id="y"></span> L.H Rénovation – Tous droits réservés</p>
+    <nav><a href="services.html" data-k="nav.services">Services</a><a href="realisations.html" data-k="nav.realisations">Réalisations</a><a href="pourquoi-nous.html" data-k="nav.pourquoi-nous">Pourquoi nous</a><a href="methode.html" data-k="nav.methode">Méthode</a><a href="avis.html" data-k="nav.avis">Avis</a><a href="contact.html" data-k="nav.contact">Contact</a><a href="compte.html" data-k="nav.mon-compte">Mon compte</a><a href="mentions-legales.html" data-k="nav.mentions-legales">Mentions légales</a></nav>
+    <p>© <span id="y"></span> <span data-k="footer.l-h-renovation-tous-droits-res">L.H Rénovation – Tous droits réservés</span></p>
   </div>
 </footer>
 <a href="tel:+33786244154" class="callfab" aria-label="Appeler"><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></svg></a>
-<script src="script.js?v=20261021"></script>
-<script src="reviews.js?v=20261021"></script>
-<script src="realisations.js?v=20261021"></script>
+<script src="script.js?v=20261022"></script>
+<script src="reviews.js?v=20261022"></script>
+<script src="realisations.js?v=20261022"></script>
 </body>
 </html>

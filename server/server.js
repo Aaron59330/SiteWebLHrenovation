@@ -39,6 +39,7 @@ CREATE TABLE IF NOT EXISTS reviews(
 CREATE TABLE IF NOT EXISTS realisations(
   id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, work_type TEXT, description TEXT,
   images TEXT NOT NULL DEFAULT '[]', created_at TEXT NOT NULL DEFAULT (datetime('now')));
+CREATE TABLE IF NOT EXISTS content(key TEXT PRIMARY KEY, value TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS settings(key TEXT PRIMARY KEY, value TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS quotes(
   id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
@@ -81,7 +82,8 @@ app.use(helmet({
 }));
 const smallJson = express.json({ limit: '20kb' });
 const bigJson = express.json({ limit: '25mb' });
-app.use((req, res, next) => (req.path.startsWith('/api/admin/realisations') ? next() : smallJson(req, res, next)));
+const smallJsonBig = express.json({ limit: '300kb' });
+app.use((req, res, next) => (req.path.startsWith('/api/admin/realisations') || req.path === '/api/admin/content' ? next() : smallJson(req, res, next)));
 app.use(cookieParser());
 
 // Protection CSRF : cookies SameSite=Strict + JSON obligatoire + origine vérifiée
@@ -209,6 +211,14 @@ app.get('/api/realisations', (req, res) => {
     items: db.prepare('SELECT * FROM realisations ORDER BY id DESC').all().map(realPublic) });
 });
 
+
+/* ----- Textes du site modifiables par l'administrateur ----- */
+const KEY_RE = /^[a-z0-9][a-z0-9._-]{0,79}$/;
+app.get('/api/content', (req, res) => {
+  const out = {}; db.prepare('SELECT key,value FROM content').all().forEach(r => { out[r.key] = r.value; });
+  res.set('Cache-Control', 'no-cache').json(out);
+});
+
 /* ----- Espace administrateur ----- */
 app.post('/api/admin/login', authLimiter, (req, res) => {
   const email = clean(req.body.email, 200).toLowerCase(), password = String(req.body.password || '').slice(0, 100);
@@ -269,6 +279,24 @@ admin.put('/realisations/:id', bigJson, (req, res) => {
 admin.delete('/realisations/:id', (req, res) => {
   const row = db.prepare('SELECT * FROM realisations WHERE id=?').get(+req.params.id);
   if (row) { imgList(row).forEach(removeImage); db.prepare('DELETE FROM realisations WHERE id=?').run(row.id); }
+  res.json({ ok: true });
+});
+
+admin.put('/content', smallJsonBig, (req, res) => {
+  const v = req.body.values; if (!v || typeof v !== 'object' || Array.isArray(v)) return res.status(400).json({ error: 'Requête invalide.' });
+  const keys = Object.keys(v); if (keys.length > 300) return res.status(400).json({ error: 'Trop de modifications d\'un coup.' });
+  const up = db.prepare('INSERT INTO content(key,value) VALUES(?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value');
+  const del = db.prepare('DELETE FROM content WHERE key=?');
+  db.transaction(() => keys.forEach(k => {
+    if (!KEY_RE.test(k)) return;
+    const t = clean(v[k], 3000).replace(/\s*\n\s*/g, ' ');
+    t ? up.run(k, t) : del.run(k);
+  }))();
+  res.json({ ok: true });
+});
+admin.post('/content/reset', (req, res) => {
+  const keys = Array.isArray(req.body.keys) ? req.body.keys.filter(k => KEY_RE.test(String(k))) : [];
+  const del = db.prepare('DELETE FROM content WHERE key=?'); db.transaction(() => keys.forEach(k => del.run(k)))();
   res.json({ ok: true });
 });
 app.use('/api/admin', admin);
