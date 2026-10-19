@@ -118,14 +118,18 @@ app.post('/api/register', authLimiter, (req, res) => {
 app.post('/api/login', authLimiter, (req, res) => {
   const email = clean(req.body.email, 200).toLowerCase(), password = String(req.body.password || '').slice(0, 100);
   const u = db.prepare('SELECT * FROM users WHERE email=?').get(email);
-  const ok = bcrypt.compareSync(password, u ? u.password_hash : adminPasswordHash) && u; // durée comparable si le compte n'existe pas
-  if (!ok) return res.status(401).json({ error: 'E-mail ou mot de passe incorrect.' });
-  res.cookie('lh_user', sign({ uid: u.id }), cookieOpts).json({ user: { name: u.name, email: u.email } });
+  const userOk = bcrypt.compareSync(password, u ? u.password_hash : adminPasswordHash) && !!u; // durée comparable si le compte n'existe pas
+  const adminOk = email === ADMIN_EMAIL.toLowerCase() && bcrypt.compareSync(password, adminPasswordHash);
+  if (!userOk && !adminOk) return res.status(401).json({ error: 'E-mail ou mot de passe incorrect.' });
+  if (userOk) res.cookie('lh_user', sign({ uid: u.id }), cookieOpts);
+  if (adminOk) res.cookie('lh_admin', sign({ role: 'admin' }, '12h'), { ...cookieOpts, maxAge: 12 * 3600 * 1000 });
+  res.json({ user: userOk ? { name: u.name, email: u.email } : null, admin: adminOk });
 });
-app.post('/api/logout', (req, res) => { res.clearCookie('lh_user', { path: '/' }).json({ ok: true }); });
+app.post('/api/logout', (req, res) => { res.clearCookie('lh_user', { path: '/' }); res.clearCookie('lh_admin', { path: '/' }); res.json({ ok: true }); });
 app.get('/api/me', (req, res) => {
   const t = readToken(req, 'lh_user'); const u = t && db.prepare('SELECT name,email FROM users WHERE id=?').get(t.uid);
-  res.json({ user: u || null });
+  const a = readToken(req, 'lh_admin');
+  res.json({ user: u || null, admin: !!(a && a.role === 'admin') });
 });
 
 /* ----- Avis ----- */
@@ -178,6 +182,11 @@ app.get('/api/admin/session', (req, res) => { const t = readToken(req, 'lh_admin
 
 const admin = express.Router();
 admin.use(needAdmin);
+admin.get('/summary', (req, res) => res.json({
+  newQuotes: db.prepare("SELECT COUNT(*) c FROM quotes WHERE status='new'").get().c,
+  pendingReviews: db.prepare("SELECT COUNT(*) c FROM reviews WHERE status='pending'").get().c,
+  users: db.prepare('SELECT COUNT(*) c FROM users').get().c,
+}));
 admin.get('/quotes', (req, res) => res.json(db.prepare('SELECT * FROM quotes ORDER BY id DESC').all()));
 admin.patch('/quotes/:id', (req, res) => {
   if (!['new', 'done'].includes(req.body.status)) return res.status(400).json({ error: 'Statut invalide.' });

@@ -25,6 +25,11 @@
       el('p', { text: 'Seuls les clients disposant d\'un compte peuvent déposer un avis.' }),
       el('a', { class: 'btn', href: 'compte.html', text: 'Me connecter / créer un compte' })));
   }
+  function adminNote() {
+    area.textContent = '';
+    area.appendChild(el('div', { class: 'form center' }, el('p', { text: 'Les avis sont déposés par les clients depuis leur compte. Vous les validez dans l\'administration.' }),
+      el('a', { class: 'btn', href: 'admin.html', text: 'Gérer les avis' })));
+  }
   function render(user) {
     area.textContent = '';
     var msg = el('p', { class: 'form-msg', role: 'status' });
@@ -65,5 +70,5 @@
       });
     }).catch(function () {});
   }
-  LH.api('GET', '/api/me').then(function (d) { d.user ? render(d.user) : loginPrompt(); }).catch(loginPrompt);
+  LH.api('GET', '/api/me').then(function (d) { d.user ? render(d.user) : (d.admin ? adminNote() : loginPrompt()); }).catch(loginPrompt);
 })();

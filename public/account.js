@@ -23,14 +23,16 @@
     });
     area.appendChild(form);
   }
-  function home(user) {
+  function home(user, isAdmin) {
     area.textContent = '';
     var out = el('button', { class: 'btn btn-ghost', type: 'button', text: 'Me déconnecter' });
     out.addEventListener('click', function () { LH.api('POST', '/api/logout', {}).then(function () { location.reload(); }); });
-    area.appendChild(el('div', { class: 'form center' }, el('h2', { text: 'Bonjour ' + user.name.split(' ')[0] + ' 👋' }),
-      el('p', { text: 'Vous êtes connecté avec ' + user.email + '.' }),
-      el('a', { class: 'btn', href: 'avis.html#deposer', text: 'Laisser un avis sur mes travaux' }),
+    var title = user ? 'Bonjour ' + user.name.split(' ')[0] + ' 👋' : 'Bonjour 👋';
+    area.appendChild(el('div', { class: 'form center' }, el('h2', { text: title }),
+      el('p', { text: user ? 'Vous êtes connecté avec ' + user.email + '.' : 'Vous êtes connecté en tant qu\'administrateur.' }),
+      isAdmin ? el('a', { class: 'btn', href: 'admin.html', text: 'Ouvrir l\'administration' }) : null,
+      user ? el('a', { class: 'btn', href: 'avis.html#deposer', text: 'Laisser un avis sur mes travaux' }) : null,
       el('a', { class: 'btn', href: 'contact.html', text: 'Demander un devis' }), out));
   }
-  LH.api('GET', '/api/me').then(function (d) { d.user ? home(d.user) : authForm('login'); }).catch(function () { authForm('login'); });
+  LH.api('GET', '/api/me').then(function (d) { (d.user || d.admin) ? home(d.user, d.admin) : authForm('login'); }).catch(function () { authForm('login'); });
 })();

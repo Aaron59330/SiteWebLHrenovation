@@ -133,3 +133,7 @@ h2{font-size:clamp(1.7rem,3.4vw,2.6rem)}h3{font-size:1.15rem}
 .arow.new,.arow.pending{border-left-color:#e0a800}.arow.done,.arow.approved{border-left-color:#2e7d32}.arow.rejected{border-left-color:#b33}
 .ahead{display:flex;flex-wrap:wrap;align-items:center;gap:10px}.arow .meta{font-size:.85rem;color:var(--mut);margin:6px 0}.arow .meta a{color:var(--sand-d);font-weight:600}
 .arow p{white-space:pre-wrap}.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+/* bandeau administrateur (visible uniquement une fois connecté en admin) */
+.adminbar{background:var(--sand);color:var(--black);font-size:.82rem;padding:8px 0}
+.adminbar-in{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center}.adminbar a{margin-left:auto;font-weight:700;text-decoration:underline}
+.admin-link{color:var(--sand-d);font-weight:700}

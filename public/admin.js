@@ -20,11 +20,16 @@
     area.textContent = '';
     var bar = el('div', { class: 'admin-bar' }, el('h2', { text: 'Administration' }));
     var tabs = el('div', { class: 'tabs' });
+    var tabBtns = {};
     [['quotes', 'Demandes de devis'], ['reviews', 'Avis'], ['users', 'Clients']].forEach(function (t) {
-      var b = button(t[1], t[0] === tab ? 'on' : '', function () { tab = t[0]; dash(); }); tabs.appendChild(b);
+      var b = button(t[1], t[0] === tab ? 'on' : '', function () { tab = t[0]; dash(); }); tabs.appendChild(b); tabBtns[t[0]] = [b, t[1]];
     });
+    LH.api('GET', '/api/admin/summary').then(function (c) {
+      if (c.newQuotes) tabBtns.quotes[0].textContent = tabBtns.quotes[1] + ' (' + c.newQuotes + ' nouvelle' + (c.newQuotes > 1 ? 's' : '') + ')';
+      if (c.pendingReviews) tabBtns.reviews[0].textContent = tabBtns.reviews[1] + ' (' + c.pendingReviews + ' à valider)';
+    }).catch(function () {});
     bar.appendChild(tabs);
-    bar.appendChild(button('Déconnexion', '', function () { LH.api('POST', '/api/admin/logout', {}).then(login); }));
+    bar.appendChild(button('Déconnexion', '', function () { LH.api('POST', '/api/logout', {}).then(function () { location.href = 'index.html'; }); }));
     area.appendChild(bar);
     area.appendChild(el('div', { id: 'admin-body' }));
     show();

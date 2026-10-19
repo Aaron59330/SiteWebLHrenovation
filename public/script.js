@@ -18,8 +18,22 @@ window.LH = {
 };
 (function () {
   var a = document.getElementById('nav-account');
-  if (a) LH.api('GET', '/api/me').then(function (d) { if (d.user) a.textContent = d.user.name.split(' ')[0]; }).catch(function () {});
+  LH.api('GET', '/api/me').then(function (d) {
+    if (a && d.user) a.textContent = d.user.name.split(' ')[0];
+    if (!d.admin) return;
+    document.body.classList.add('is-admin');
+    var menu = document.querySelector('.menu');
+    if (menu && a) menu.insertBefore(LH.el('a', { href: 'admin.html', class: 'admin-link', text: 'Administration' }), a);
+    var bar = LH.el('div', { class: 'adminbar' }, LH.el('div', { class: 'container adminbar-in' },
+      LH.el('strong', { text: 'Mode administrateur' }), LH.el('span', { id: 'ab-info', text: '' }),
+      LH.el('a', { href: 'admin.html', text: 'Ouvrir l\'administration →' })));
+    document.body.insertBefore(bar, document.body.firstChild);
+    LH.api('GET', '/api/admin/summary').then(function (c) {
+      document.getElementById('ab-info').textContent = c.newQuotes + ' devis à traiter · ' + c.pendingReviews + ' avis à valider · ' + c.users + ' client' + (c.users > 1 ? 's' : '');
+    }).catch(function () {});
+  }).catch(function () {});
 })();
+
 (function(){
   var b=document.querySelector('.burger'),m=document.querySelector('.menu');
   if(b)b.addEventListener('click',function(){var o=m.classList.toggle('open');b.setAttribute('aria-expanded',o)});
