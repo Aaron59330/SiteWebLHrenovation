@@ -24,6 +24,7 @@
       <a href="pourquoi-nous.html">Pourquoi nous</a>
       <a href="methode.html">Méthode</a>
       <a href="avis.html">Avis</a>
+      <a href="compte.html" id="nav-account">Mon compte</a>
       <a href="contact.html" class="btn btn-sm">Devis gratuit</a>
     </nav>
   </div>
@@ -42,26 +43,29 @@
         <li><b>Horaires</b>Lun – Sam : 8h – 19h</li>
       </ul>
     </div>
-    <form class="form" id="form" action="mailto:lhrenovation.int@gmail.com" method="post" enctype="text/plain">
-      <label>Nom<input name="nom" required autocomplete="name"></label>
-      <label>Téléphone<input name="tel" type="tel" required autocomplete="tel"></label>
-      <label>E-mail<input name="email" type="email" autocomplete="email"></label>
+    <form class="form" id="quote-form" novalidate>
+      <label>Nom<input name="name" required maxlength="100" autocomplete="name"></label>
+      <label>Téléphone<input name="phone" type="tel" required maxlength="30" autocomplete="tel"></label>
+      <label>E-mail (facultatif)<input name="email" type="email" maxlength="200" autocomplete="email"></label>
       <label>Type de travaux
-        <select name="type"><option>Peinture</option><option>Rénovation complète</option><option>Plâtrerie</option><option>Sols / carrelage</option><option>Salle de bain</option><option>Cuisine</option><option>Autre</option></select>
+        <select name="work_type"><option>Peinture</option><option>Rénovation complète</option><option>Plâtrerie</option><option>Sols / carrelage</option><option>Salle de bain</option><option>Cuisine</option><option>Autre</option></select>
       </label>
-      <label>Votre projet<textarea name="message" rows="4" required></textarea></label>
+      <label>Votre projet<textarea name="message" rows="4" required maxlength="3000" placeholder="Pièces concernées, surface, délais souhaités…"></textarea></label>
+      <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
       <button class="btn" type="submit">Envoyer ma demande</button>
+      <p class="form-msg" id="quote-msg" role="status"></p>
     </form>
   </div>
 </section></main>
 <footer class="footer">
   <div class="container foot">
     <img src="assets/logo.png" alt="L.H Rénovation">
-    <nav><a href="services.html">Services</a><a href="realisations.html">Réalisations</a><a href="pourquoi-nous.html">Pourquoi nous</a><a href="methode.html">Méthode</a><a href="avis.html">Avis</a><a href="contact.html">Contact</a><a href="mentions-legales.html">Mentions légales</a></nav>
+    <nav><a href="services.html">Services</a><a href="realisations.html">Réalisations</a><a href="pourquoi-nous.html">Pourquoi nous</a><a href="methode.html">Méthode</a><a href="avis.html">Avis</a><a href="contact.html">Contact</a><a href="compte.html">Mon compte</a><a href="mentions-legales.html">Mentions légales</a></nav>
     <p>© <span id="y"></span> L.H Rénovation – Tous droits réservés</p>
   </div>
 </footer>
 <a href="tel:+33786244154" class="callfab" aria-label="Appeler"><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></svg></a>
 <script src="script.js"></script>
+<script src="quote.js"></script>
 </body>
 </html>

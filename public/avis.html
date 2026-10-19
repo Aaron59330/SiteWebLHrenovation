@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Avis clients – L.H Rénovation</title>
+<meta name="description" content="Ils nous ont fait confiance.">
+<meta name="theme-color" content="#0b0b0b">
+<link rel="icon" href="assets/favicon.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="header" id="top">
+  <div class="container nav">
+    <a href="index.html" class="brand"><img src="assets/logo.png" alt="L.H Rénovation – accueil"></a>
+    <button class="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    <nav class="menu">
+      <a href="index.html">Accueil</a>
+      <a href="services.html">Services</a>
+      <a href="realisations.html">Réalisations</a>
+      <a href="pourquoi-nous.html">Pourquoi nous</a>
+      <a href="methode.html">Méthode</a>
+      <a href="avis.html" class="active">Avis</a>
+      <a href="compte.html" id="nav-account">Mon compte</a>
+      <a href="contact.html" class="btn btn-sm">Devis gratuit</a>
+    </nav>
+  </div>
+</header>
+<main>
+<section class="banner"><div class="container"><nav class="crumb"><a href="index.html">Accueil</a> / Avis</nav><h1>Avis clients</h1><p>Ils nous ont fait confiance.</p></div></section>
+<section class="section" id="avis">
+  <div class="container">
+    <div class="head"><h2>Ils nous ont fait confiance</h2></div>
+    <div id="reviews-list" class="cards three" aria-live="polite"></div>
+  </div>
+</section>
+<section class="section sand" id="deposer">
+  <div class="container narrow">
+    <div class="head"><h2>Vous êtes client ? Laissez votre avis</h2><p>Connectez-vous à votre compte client pour donner votre avis sur les travaux réalisés. Il sera publié après validation.</p></div>
+    <div id="review-area">
+      <p class="center">Chargement…</p>
+    </div>
+  </div>
+</section>
+
+<section class="band"><div class="container band-in"><h2>Un projet de rénovation ?</h2><a href="contact.html" class="btn">Demander un devis gratuit</a></div></section>
+</main>
+<footer class="footer">
+  <div class="container foot">
+    <img src="assets/logo.png" alt="L.H Rénovation">
+    <nav><a href="services.html">Services</a><a href="realisations.html">Réalisations</a><a href="pourquoi-nous.html">Pourquoi nous</a><a href="methode.html">Méthode</a><a href="avis.html">Avis</a><a href="contact.html">Contact</a><a href="compte.html">Mon compte</a><a href="mentions-legales.html">Mentions légales</a></nav>
+    <p>© <span id="y"></span> L.H Rénovation – Tous droits réservés</p>
+  </div>
+</footer>
+<a href="tel:+33786244154" class="callfab" aria-label="Appeler"><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></svg></a>
+<script src="script.js"></script>
+<script src="reviews.js"></script>
+</body>
+</html>

@@ -24,6 +24,7 @@
       <a href="pourquoi-nous.html">Pourquoi nous</a>
       <a href="methode.html">Méthode</a>
       <a href="avis.html">Avis</a>
+      <a href="compte.html" id="nav-account">Mon compte</a>
       <a href="contact.html" class="btn btn-sm">Devis gratuit</a>
     </nav>
   </div>
@@ -104,11 +105,7 @@
 <section class="section" id="avis">
   <div class="container">
     <div class="head"><h2>Ils nous ont fait confiance</h2></div>
-    <div class="cards three">
-      <blockquote class="card quote"><div class="stars">★★★★★</div><p>« Travail soigné et très propre. L'appartement est méconnaissable, merci ! »</p><cite>Client – Exemple</cite></blockquote>
-      <blockquote class="card quote"><div class="stars">★★★★★</div><p>« Délais respectés et excellent contact du début à la fin. Je recommande. »</p><cite>Client – Exemple</cite></blockquote>
-      <blockquote class="card quote"><div class="stars">★★★★★</div><p>« Une équipe sérieuse, des finitions parfaites. Nous referons appel à eux. »</p><cite>Client – Exemple</cite></blockquote>
-    </div>
+    <div id="reviews-list" class="cards three" data-limit="3" aria-live="polite"></div>
     <div class="more-wrap"><a href="avis.html" class="btn btn-ghost">Lire tous les avis</a></div>
   </div>
 </section>
@@ -117,11 +114,12 @@
 <footer class="footer">
   <div class="container foot">
     <img src="assets/logo.png" alt="L.H Rénovation">
-    <nav><a href="services.html">Services</a><a href="realisations.html">Réalisations</a><a href="pourquoi-nous.html">Pourquoi nous</a><a href="methode.html">Méthode</a><a href="avis.html">Avis</a><a href="contact.html">Contact</a><a href="mentions-legales.html">Mentions légales</a></nav>
+    <nav><a href="services.html">Services</a><a href="realisations.html">Réalisations</a><a href="pourquoi-nous.html">Pourquoi nous</a><a href="methode.html">Méthode</a><a href="avis.html">Avis</a><a href="contact.html">Contact</a><a href="compte.html">Mon compte</a><a href="mentions-legales.html">Mentions légales</a></nav>
     <p>© <span id="y"></span> L.H Rénovation – Tous droits réservés</p>
   </div>
 </footer>
 <a href="tel:+33786244154" class="callfab" aria-label="Appeler"><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></svg></a>
 <script src="script.js"></script>
+<script src="reviews.js"></script>
 </body>
 </html>
