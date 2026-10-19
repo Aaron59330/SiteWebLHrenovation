@@ -23,7 +23,8 @@ if (!ADMIN_EMAIL || !ADMIN_PASSWORD || ADMIN_PASSWORD.length < 10) { console.err
 
 /* ---------- Base de données ---------- */
 const dataDir = path.join(__dirname, '..', 'data');
-fs.mkdirSync(dataDir, { recursive: true });
+const uploadDir = path.join(dataDir, 'uploads');
+fs.mkdirSync(uploadDir, { recursive: true });
 const db = new Database(path.join(dataDir, 'lh.db'));
 db.pragma('journal_mode = WAL');
 db.pragma('foreign_keys = ON');
@@ -35,6 +36,10 @@ CREATE TABLE IF NOT EXISTS reviews(
   id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   rating INTEGER NOT NULL, work_type TEXT, comment TEXT NOT NULL,
   status TEXT NOT NULL DEFAULT 'pending', created_at TEXT NOT NULL DEFAULT (datetime('now')));
+CREATE TABLE IF NOT EXISTS realisations(
+  id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, work_type TEXT, description TEXT,
+  images TEXT NOT NULL DEFAULT '[]', created_at TEXT NOT NULL DEFAULT (datetime('now')));
+CREATE TABLE IF NOT EXISTS settings(key TEXT PRIMARY KEY, value TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS quotes(
   id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
   name TEXT NOT NULL, phone TEXT NOT NULL, email TEXT, work_type TEXT, message TEXT NOT NULL,
@@ -74,13 +79,15 @@ app.use(helmet({
     upgradeInsecureRequests: PROD ? [] : null,
   } },
 }));
-app.use(express.json({ limit: '20kb' }));
+const smallJson = express.json({ limit: '20kb' });
+const bigJson = express.json({ limit: '25mb' });
+app.use((req, res, next) => (req.path.startsWith('/api/admin/realisations') ? next() : smallJson(req, res, next)));
 app.use(cookieParser());
 
 // Protection CSRF : cookies SameSite=Strict + JSON obligatoire + origine vérifiée
 app.use('/api', (req, res, next) => {
   if (['GET', 'HEAD', 'OPTIONS'].includes(req.method)) return next();
-  if (!req.is('application/json')) return res.status(415).json({ error: 'Requête invalide.' });
+  if (req.method !== 'DELETE' && !req.is('application/json')) return res.status(415).json({ error: 'Requête invalide.' });
   const origin = req.get('origin');
   if (origin) {
     let ok = false;
@@ -169,6 +176,39 @@ app.post('/api/quotes', quoteLimiter, (req, res) => {
   res.json({ ok: true, message: 'Merci ! Votre demande est bien envoyée, nous vous recontactons sous 24h.' });
 });
 
+
+/* ----- Réalisations (photos + textes gérés par l'administrateur) ----- */
+const MAX_IMAGES = 8, MAX_IMG_BYTES = 6 * 1024 * 1024;
+const REAL_DEFAULTS = { title: 'Des chantiers qui parlent d\'eux-mêmes', text: 'Un aperçu de nos dernières rénovations.' };
+const getSetting = (k, d) => { const r = db.prepare('SELECT value FROM settings WHERE key=?').get(k); return r ? r.value : d; };
+const setSetting = (k, v) => db.prepare('INSERT INTO settings(key,value) VALUES(?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value').run(k, v);
+function saveImage(dataUrl) {
+  const m = /^data:image\/(jpeg|png|webp);base64,([A-Za-z0-9+/=]+)$/.exec(String(dataUrl || ''));
+  if (!m) throw Object.assign(new Error('Image invalide (formats acceptés : JPEG, PNG, WebP).'), { status: 400 });
+  const buf = Buffer.from(m[2], 'base64');
+  if (buf.length < 100 || buf.length > MAX_IMG_BYTES) throw Object.assign(new Error('Image trop lourde (6 Mo maximum).'), { status: 400 });
+  const isJpg = buf[0] === 0xFF && buf[1] === 0xD8 && buf[2] === 0xFF;
+  const isPng = buf.slice(0, 4).equals(Buffer.from([0x89, 0x50, 0x4E, 0x47]));
+  const isWebp = buf.slice(0, 4).toString() === 'RIFF' && buf.slice(8, 12).toString() === 'WEBP';
+  const ext = isJpg ? 'jpg' : isPng ? 'png' : isWebp ? 'webp' : null;       // le contenu réel décide, pas ce que déclare le client
+  if (!ext) throw Object.assign(new Error('Fichier image non reconnu.'), { status: 400 });
+  const name = crypto.randomBytes(16).toString('hex') + '.' + ext;
+  fs.writeFileSync(path.join(uploadDir, name), buf);
+  return name;
+}
+const removeImage = (name) => { if (/^[a-f0-9]{32}\.(jpg|png|webp)$/.test(name)) fs.rm(path.join(uploadDir, name), () => {}); };
+const imgList = (row) => { try { return JSON.parse(row.images).filter(n => /^[a-f0-9]{32}\.(jpg|png|webp)$/.test(n)); } catch { return []; } };
+const realPublic = (r) => ({ id: r.id, title: r.title, work_type: r.work_type, description: r.description, images: imgList(r).map(n => '/uploads/' + n) });
+function realFields(b) {
+  const title = clean(b.title, 120), description = clean(b.description, 2000), work = WORK_TYPES.includes(b.work_type) ? b.work_type : 'Autre';
+  if (title.length < 2) throw Object.assign(new Error('Indiquez un titre.'), { status: 400 });
+  return { title, description, work };
+}
+app.get('/api/realisations', (req, res) => {
+  res.json({ intro: { title: getSetting('real_title', REAL_DEFAULTS.title), text: getSetting('real_text', REAL_DEFAULTS.text) },
+    items: db.prepare('SELECT * FROM realisations ORDER BY id DESC').all().map(realPublic) });
+});
+
 /* ----- Espace administrateur ----- */
 app.post('/api/admin/login', authLimiter, (req, res) => {
   const email = clean(req.body.email, 200).toLowerCase(), password = String(req.body.password || '').slice(0, 100);
@@ -201,17 +241,54 @@ admin.patch('/reviews/:id', (req, res) => {
 admin.delete('/reviews/:id', (req, res) => { db.prepare('DELETE FROM reviews WHERE id=?').run(+req.params.id); res.json({ ok: true }); });
 admin.get('/users', (req, res) => res.json(db.prepare('SELECT id,name,email,created_at FROM users ORDER BY id DESC').all()));
 admin.delete('/users/:id', (req, res) => { db.prepare('DELETE FROM users WHERE id=?').run(+req.params.id); res.json({ ok: true }); });
+
+admin.put('/realisations-text', smallJson, (req, res) => {
+  setSetting('real_title', clean(req.body.title, 150) || REAL_DEFAULTS.title);
+  setSetting('real_text', clean(req.body.text, 500)); res.json({ ok: true });
+});
+admin.get('/realisations', (req, res) => res.json(db.prepare('SELECT * FROM realisations ORDER BY id DESC').all().map(realPublic)));
+admin.post('/realisations', bigJson, (req, res) => {
+  const f = realFields(req.body), add = Array.isArray(req.body.add) ? req.body.add : [];
+  if (!add.length || add.length > MAX_IMAGES) return res.status(400).json({ error: 'Ajoutez entre 1 et ' + MAX_IMAGES + ' photos.' });
+  const names = []; try { add.forEach(d => names.push(saveImage(d))); } catch (e) { names.forEach(removeImage); return res.status(e.status || 500).json({ error: e.message }); }
+  const id = db.prepare('INSERT INTO realisations(title,work_type,description,images) VALUES(?,?,?,?)').run(f.title, f.work, f.description, JSON.stringify(names)).lastInsertRowid;
+  res.json({ ok: true, id });
+});
+admin.put('/realisations/:id', bigJson, (req, res) => {
+  const row = db.prepare('SELECT * FROM realisations WHERE id=?').get(+req.params.id);
+  if (!row) return res.status(404).json({ error: 'Introuvable.' });
+  const f = realFields(req.body), current = imgList(row);
+  const keep = (Array.isArray(req.body.keep) ? req.body.keep : []).map(u => String(u).replace('/uploads/', '')).filter(n => current.includes(n));
+  const add = Array.isArray(req.body.add) ? req.body.add : [];
+  if (keep.length + add.length < 1 || keep.length + add.length > MAX_IMAGES) return res.status(400).json({ error: 'Une réalisation doit avoir entre 1 et ' + MAX_IMAGES + ' photos.' });
+  const added = []; try { add.forEach(d => added.push(saveImage(d))); } catch (e) { added.forEach(removeImage); return res.status(e.status || 500).json({ error: e.message }); }
+  current.filter(n => !keep.includes(n)).forEach(removeImage);
+  db.prepare('UPDATE realisations SET title=?,work_type=?,description=?,images=? WHERE id=?').run(f.title, f.work, f.description, JSON.stringify(keep.concat(added)), row.id);
+  res.json({ ok: true });
+});
+admin.delete('/realisations/:id', (req, res) => {
+  const row = db.prepare('SELECT * FROM realisations WHERE id=?').get(+req.params.id);
+  if (row) { imgList(row).forEach(removeImage); db.prepare('DELETE FROM realisations WHERE id=?').run(row.id); }
+  res.json({ ok: true });
+});
 app.use('/api/admin', admin);
 app.use('/api', (req, res) => res.status(404).json({ error: 'Introuvable.' }));
 
 /* ----- Pages du site ----- */
 app.use((req, res, next) => { if (req.path === '/admin.html') res.set('X-Robots-Tag', 'noindex, nofollow'); next(); });
+app.use('/uploads', express.static(uploadDir, { dotfiles: 'ignore', index: false, immutable: true, maxAge: '30d',
+  setHeaders: (res) => res.setHeader('Content-Security-Policy', "default-src 'none'; sandbox") }));
 app.use(express.static(path.join(__dirname, '..', 'public'), {
   extensions: ['html'], dotfiles: 'ignore',
   // pages, scripts et styles : le navigateur revérifie à chaque visite (mises à jour visibles tout de suite)
   setHeaders: (res, file) => { res.setHeader('Cache-Control', /\.(png|jpe?g|webp|svg|ico|woff2?)$/i.test(file) ? 'public, max-age=86400' : 'no-cache'); },
 }));
 app.use((req, res) => res.status(404).sendFile(path.join(__dirname, '..', 'public', 'index.html')));
-app.use((err, req, res, next) => { console.error(err); res.status(err.status || 500).json({ error: 'Erreur serveur.' }); });
+app.use((err, req, res, next) => {
+  const st = err.status || 500;
+  if (st >= 500) console.error(err);
+  const msg = err.type === 'entity.too.large' ? 'Fichier trop volumineux (réduisez le nombre ou la taille des photos).' : st < 500 && err.expose !== false && !err.type ? err.message : st < 500 ? 'Requête invalide.' : 'Erreur serveur.';
+  res.status(st).json({ error: msg });
+});
 
 app.listen(PORT, '127.0.0.1', () => console.log(`L.H Rénovation sur http://127.0.0.1:${PORT}`));

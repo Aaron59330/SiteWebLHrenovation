@@ -2,6 +2,7 @@
 window.LH = {
   api: function (method, url, body) {
     var o = { method: method, headers: {}, credentials: 'same-origin' };
+    if (body === undefined && method !== 'GET') body = {};
     if (body !== undefined) { o.headers['Content-Type'] = 'application/json'; o.body = JSON.stringify(body); }
     return fetch(url, o).then(function (r) {
       return r.json().catch(function () { return {}; }).then(function (d) { if (!r.ok) { var e = new Error(d.error || 'Erreur'); e.status = r.status; throw e; } return d; });
