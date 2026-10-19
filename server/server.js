@@ -197,7 +197,11 @@ app.use('/api', (req, res) => res.status(404).json({ error: 'Introuvable.' }));
 
 /* ----- Pages du site ----- */
 app.use((req, res, next) => { if (req.path === '/admin.html') res.set('X-Robots-Tag', 'noindex, nofollow'); next(); });
-app.use(express.static(path.join(__dirname, '..', 'public'), { extensions: ['html'], dotfiles: 'ignore', maxAge: PROD ? '1h' : 0 }));
+app.use(express.static(path.join(__dirname, '..', 'public'), {
+  extensions: ['html'], dotfiles: 'ignore',
+  // pages, scripts et styles : le navigateur revérifie à chaque visite (mises à jour visibles tout de suite)
+  setHeaders: (res, file) => { res.setHeader('Cache-Control', /\.(png|jpe?g|webp|svg|ico|woff2?)$/i.test(file) ? 'public, max-age=86400' : 'no-cache'); },
+}));
 app.use((req, res) => res.status(404).sendFile(path.join(__dirname, '..', 'public', 'index.html')));
 app.use((err, req, res, next) => { console.error(err); res.status(err.status || 500).json({ error: 'Erreur serveur.' }); });
 
