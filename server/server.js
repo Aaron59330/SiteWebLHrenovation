@@ -83,7 +83,7 @@ app.use(helmet({
 const smallJson = express.json({ limit: '20kb' });
 const bigJson = express.json({ limit: '25mb' });
 const smallJsonBig = express.json({ limit: '300kb' });
-app.use((req, res, next) => (req.path.startsWith('/api/admin/realisations') || req.path === '/api/admin/content' ? next() : smallJson(req, res, next)));
+app.use((req, res, next) => (req.path.startsWith('/api/admin/realisations') || req.path === '/api/admin/content' || req.path === '/api/admin/upload' ? next() : smallJson(req, res, next)));
 app.use(cookieParser());
 
 // Protection CSRF : cookies SameSite=Strict + JSON obligatoire + origine vérifiée
@@ -213,7 +213,7 @@ app.get('/api/realisations', (req, res) => {
 
 
 /* ----- Textes du site modifiables par l'administrateur ----- */
-const KEY_RE = /^[a-z0-9][a-z0-9._-]{0,79}$/;
+const KEY_RE = /^[a-z0-9][a-z0-9._@-]{0,99}$/;
 app.get('/api/content', (req, res) => {
   const out = {}; db.prepare('SELECT key,value FROM content').all().forEach(r => { out[r.key] = r.value; });
   res.set('Cache-Control', 'no-cache').json(out);
@@ -289,10 +289,16 @@ admin.put('/content', smallJsonBig, (req, res) => {
   const del = db.prepare('DELETE FROM content WHERE key=?');
   db.transaction(() => keys.forEach(k => {
     if (!KEY_RE.test(k)) return;
-    const t = clean(v[k], 3000).replace(/\s*\n\s*/g, ' ');
+    const isBlocks = k.startsWith('blocks.');   // sections ajoutées : texte plus long, saut de ligne conservés (en JSON)
+    const t = isBlocks ? String(v[k] || '').slice(0, 30000) : clean(v[k], 3000).replace(/\s*\n\s*/g, ' ');
+    if (isBlocks && t) { try { if (!Array.isArray(JSON.parse(t))) throw 0; } catch { return; } }
     t ? up.run(k, t) : del.run(k);
   }))();
   res.json({ ok: true });
+});
+admin.post('/upload', bigJson, (req, res) => {
+  let name; try { name = saveImage(req.body.image); } catch (e) { return res.status(e.status || 500).json({ error: e.message }); }
+  res.json({ url: '/uploads/' + name });
 });
 admin.post('/content/reset', (req, res) => {
   const keys = Array.isArray(req.body.keys) ? req.body.keys.filter(k => KEY_RE.test(String(k))) : [];
@@ -304,6 +310,20 @@ app.use('/api', (req, res) => res.status(404).json({ error: 'Introuvable.' }));
 
 /* ----- Pages du site ----- */
 app.use((req, res, next) => { if (req.path === '/admin.html') res.set('X-Robots-Tag', 'noindex, nofollow'); next(); });
+
+/* ----- Titre et description (Google) modifiables par page ----- */
+const escHtml = (t) => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const publicDir = path.join(__dirname, '..', 'public');
+app.get(/^\/(?:([a-z0-9-]+)\.html)?$/, (req, res, next) => {
+  const name = req.params[0] || 'index', file = path.join(publicDir, name + '.html');
+  if (!fs.existsSync(file)) return next();
+  let html = fs.readFileSync(file, 'utf8');
+  const get = (k) => { const r = db.prepare('SELECT value FROM content WHERE key=?').get(k); return r ? r.value : ''; };
+  const t = get('seo.' + name + '.title'), d = get('seo.' + name + '.desc');
+  if (t) html = html.replace(/<title>[\s\S]*?<\/title>/, () => '<title>' + escHtml(t) + '</title>');
+  if (d) html = html.replace(/<meta name="description" content="[^"]*">/, () => '<meta name="description" content="' + escHtml(d) + '">');
+  res.set('Cache-Control', 'no-cache'); res.type('html').send(html);
+});
 app.use('/uploads', express.static(uploadDir, { dotfiles: 'ignore', index: false, immutable: true, maxAge: '30d',
   setHeaders: (res) => res.setHeader('Content-Security-Policy', "default-src 'none'; sandbox") }));
 app.use(express.static(path.join(__dirname, '..', 'public'), {
