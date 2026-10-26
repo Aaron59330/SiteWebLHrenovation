@@ -223,7 +223,7 @@
     document.execCommand('insertText', false, txt);
   }
   function onClick(e) {
-    var t = e.target; if (!t.closest || t.closest('.adminbar') || t.closest('.icon-picker')) return;
+    var t = e.target; if (!t.closest || t.closest('.adminbar') || t.closest('.icon-picker') || t.closest('.rf-modal')) return;
     var ic = t.closest('.ico[data-ic]'); if (ic) { e.preventDefault(); openPicker(ic); return; }
     if (t.closest('a,button')) e.preventDefault();
   }
@@ -266,7 +266,7 @@
     renderBlocks();
     document.addEventListener('input', onInput); document.addEventListener('keydown', onKey); document.addEventListener('paste', onPaste);
     document.addEventListener('click', onClick, true); document.addEventListener('focusin', onFocus);
-    document.addEventListener('submit', function (e) { e.preventDefault(); }, true); window.addEventListener('beforeunload', beforeUnload);
+    document.addEventListener('submit', function (e) { if (!e.target.closest('.rf-modal')) e.preventDefault(); }, true); window.addEventListener('beforeunload', beforeUnload);
     ui.start.style.display = 'none'; ui.edit.style.display = ''; refresh();
   }
   function save() {

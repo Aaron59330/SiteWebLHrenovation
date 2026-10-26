@@ -29,19 +29,57 @@
     document.body.appendChild(overlay); document.body.classList.add('noscroll'); document.addEventListener('keydown', onKey); paint();
   }
 
-  LH.api('GET', '/api/realisations').then(function (d) {
+  /* ---------- gestion directe par l'administrateur ---------- */
+  function modal(title, content) {
+    var ov = el('div', { class: 'lightbox rf-modal', role: 'dialog', 'aria-modal': 'true', 'aria-label': title });
+    var x = el('button', { type: 'button', class: 'cms-btn', text: 'Fermer' }); x.addEventListener('click', function () { ov.remove(); });
+    ov.appendChild(el('div', { class: 'ip-box' }, el('h3', { text: title }), content, el('div', { class: 'ip-actions' }, x)));
+    ov.addEventListener('mousedown', function (e) { if (e.target === ov) ov.remove(); });
+    document.body.appendChild(ov); return ov;
+  }
+  function openForm(item) {
+    var ov = modal(item ? 'Modifier la réalisation' : 'Ajouter une réalisation', LH.realForm(item, function () { location.reload(); }));
+    var h = ov.querySelector('.rform > h3'); if (h) h.remove();
+  }
+  function editIntro(d) {
+    var t = prompt('Titre de la section :', d.intro.title); if (t === null) return;
+    var x = prompt('Texte d\'introduction :', d.intro.text); if (x === null) return;
+    LH.api('PUT', '/api/admin/realisations-text', { title: t, text: x }).then(function () { location.reload(); }).catch(function (e) { alert(e.message); });
+  }
+  function adminBar(d) {
+    var add = el('button', { type: 'button', class: 'btn', text: '➕ Ajouter une réalisation (photos + texte)' });
+    add.addEventListener('click', function () { openForm(null); });
+    var intro = el('button', { type: 'button', class: 'btn btn-ghost-w', text: '✏️ Titre et texte de la section' });
+    intro.addEventListener('click', function () { editIntro(d); });
+    box.parentNode.insertBefore(el('div', { class: 'rl-admin' }, add, intro), box);
+  }
+  function tileTools(it, fig) {
+    function b(txt, fn) { var x = el('button', { type: 'button', text: txt }); x.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); fn(); }); return x; }
+    fig.appendChild(el('div', { class: 'rl-tools' },
+      b('✎ Modifier', function () { openForm(it); }),
+      b('✕ Supprimer', function () { if (confirm('Supprimer « ' + it.title + ' » et ses photos ?')) LH.api('DELETE', '/api/admin/realisations/' + it.id).then(function () { location.reload(); }).catch(function (e) { alert(e.message); }); })));
+  }
+
+  Promise.all([LH.api('GET', '/api/realisations'), LH.api('GET', '/api/me').catch(function () { return {}; })]).then(function (res) {
+    var d = res[0], isAdmin = !!res[1].admin;
     var t = document.getElementById('real-title'), x = document.getElementById('real-text');
     if (t) t.textContent = d.intro.title; if (x) x.textContent = d.intro.text;
-    var max = parseInt(box.getAttribute('data-limit'), 10) || 100;
+    var max = parseInt(box.getAttribute('data-limit'), 10) || 100, canManage = isAdmin && !!LH.realForm && max > 10;   // gestion sur la page Réalisations (pas sur l'accueil)
     items = d.items; box.textContent = '';
-    if (!items.length) { box.className = 'center muted'; box.appendChild(el('p', { text: 'Nos réalisations arrivent bientôt.' })); return; }
+    if (canManage) adminBar(d);
+    if (!items.length) {
+      box.className = 'center muted';
+      box.appendChild(el('p', { text: canManage ? 'Aucune réalisation pour le moment : cliquez sur « Ajouter une réalisation » ci-dessus.' : 'Nos réalisations arrivent bientôt.' }));
+      return;
+    }
     items.slice(0, max).forEach(function (it, i) {
       var f = el('figure', { class: 'tile', tabindex: '0', role: 'button', 'aria-label': 'Voir ' + it.title },
         el('img', { src: it.images[0], alt: it.title, loading: 'lazy' }),
         it.images.length > 1 ? el('span', { class: 'tile-count', text: it.images.length + ' photos' }) : null,
         el('figcaption', {}, el('b', { text: it.title }), it.work_type || ''));
+      if (canManage) tileTools(it, f);
       f.addEventListener('click', function () { open(i); });
-      f.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(i); } });
+      f.addEventListener('keydown', function (e) { if (e.target === f && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); open(i); } });
       box.appendChild(f);
     });
   }).catch(function () { box.textContent = ''; });

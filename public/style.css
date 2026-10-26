@@ -207,3 +207,10 @@ html.cms-loading [data-k]{visibility:hidden}
 .fb-fab.is-empty,.fb-head.is-empty{display:none!important}
 @media(max-width:900px){.fb-head{display:none}}
 @media(prefers-reduced-motion:reduce){.fb-fab{animation:none}}
+/* gestion des réalisations sur la page (administrateur) */
+.rl-admin{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:30px}
+.rl-tools{position:absolute;top:10px;left:10px;z-index:3;display:flex;gap:6px;flex-wrap:wrap}
+.rl-tools button{font:inherit;font-weight:700;font-size:.75rem;border:0;border-radius:20px;padding:6px 12px;background:rgba(0,0,0,.8);color:#fff;cursor:pointer}
+.rl-tools button:hover{background:var(--sand);color:#000}
+.rf-modal{z-index:130;align-items:start;overflow:auto}.rf-modal .ip-box{margin:30px auto}
+.rf-modal .rform{border:0;padding:0}
