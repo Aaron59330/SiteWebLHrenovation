@@ -11,6 +11,80 @@
   var SAFE_HREF = /^(https?:\/\/|\/|#|[a-z0-9_-]+\.html|tel:|mailto:)/i;
   var baseKey = function (k) { return k.split('@')[0]; };
 
+
+  /* ---------- bibliothèque d'icônes ---------- */
+  var ICONS = {
+    'Peinture': 'M4 4h12v5H4z M16 6.5h3v6H11v3 M11 15.5V21',
+    'Pinceau': 'M18 3l3 3-9 9-3-3z M9 12c-3 0-4 2-4 4 0 2-1 3-2 4 3 1 7 0 7-4',
+    'Maison': 'M3 20h18 M5 20V9l7-5 7 5v11 M9 20v-6h6v6',
+    'Toiture': 'M2 12l10-8 10 8 M5 10v10h14V10',
+    'Plâtrerie': 'M3 5l7 7 M8 3l-5 5 13 13 5-5z M14 9l1.5 1.5',
+    'Carrelage': 'M3 3h18v18H3z M3 12h18 M12 3v18',
+    'Parquet': 'M3 7l9-4 9 4-9 4z M3 12l9 4 9-4 M3 17l9 4 9-4',
+    'Salle de bain': 'M4 12h16v4a4 4 0 01-4 4H8a4 4 0 01-4-4z M6 12V6a2 2 0 014 0 M7 20v2 M17 20v2',
+    'Cuisine': 'M4 3h16v18H4z M4 10h16 M8 6h1 M8 14v3',
+    'Plomberie': 'M12 3s6 6.5 6 11a6 6 0 01-12 0c0-4.5 6-11 6-11z',
+    'Électricité': 'M13 2L4 14h7l-1 8 9-12h-7z',
+    'Ampoule': 'M9 18h6 M10 21h4 M12 3a6 6 0 00-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0012 3z',
+    'Fenêtre': 'M4 4h16v14H4z M12 4v14 M4 11h16 M2 21h20',
+    'Porte': 'M6 21V4a1 1 0 011-1h10a1 1 0 011 1v17 M3 21h18 M14 12h.01',
+    'Escalier': 'M3 21h6v-6h6v-6h6V3',
+    'Marteau': 'M14 4l6 6-3 3-6-6z M13 8L4 17l3 3 9-9',
+    'Clé à molette': 'M14.5 5.5a4 4 0 00-5 5L3 17l4 4 6.5-6.5a4 4 0 005-5l-2.5 2.5-2.5-.5-.5-2.5z',
+    'Mètre': 'M3 15l12-12 6 6-12 12z M7 11l2 2 M10 8l2 2 M13 5l2 2',
+    'Clé': 'M8 15a4 4 0 110-8 4 4 0 010 8z M11 11h10 M18 11v4 M21 11v3',
+    'Garantie': 'M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z M9 12l2 2 4-4',
+    'Validé': 'M5 12l4 4 10-10',
+    'Étoile': 'M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.2 6.5 20.2l1-6.2L3 9.6l6.2-.9z',
+    'Téléphone': 'M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z',
+    'E-mail': 'M3 5h18v14H3z M3 7l9 6 9-6',
+    'Euro / prix': 'M17 6a7 7 0 100 12 M4 10h9 M4 14h9',
+    'Horloge / délai': 'M12 3a9 9 0 100 18 9 9 0 000-18z M12 7v5l3 2',
+    'Calendrier': 'M4 5h16v16H4z M4 10h16 M8 3v4 M16 3v4',
+    'Camion': 'M2 6h12v10H2z M14 9h4l4 4v3h-8z M6 19a2 2 0 100-4 2 2 0 000 4z M17 19a2 2 0 100-4 2 2 0 000 4z',
+    'Personne': 'M12 12a4 4 0 100-8 4 4 0 000 8z M4 21a8 8 0 0116 0',
+    'Adresse': 'M12 21s-7-6.5-7-12a7 7 0 0114 0c0 5.5-7 12-7 12z M12 11a2 2 0 100-4 2 2 0 000 4z',
+    'Photo': 'M3 5h18v14H3z M3 15l5-5 4 4 3-3 6 6'
+  };
+  var IMG_OK = /^\/uploads\/[a-f0-9]{32}\.(jpg|png|webp)$/;
+  function setIcon(box, v) {
+    if (!box) return;
+    if (box.__orig === undefined) box.__orig = box.innerHTML;
+    if (!v) { box.innerHTML = box.__orig; box.removeAttribute('data-icn'); return; }
+    var ns = 'http://www.w3.org/2000/svg';
+    if (ICONS[v]) {
+      var svg = document.createElementNS(ns, 'svg'); svg.setAttribute('viewBox', '0 0 24 24');
+      ICONS[v].split(' M').forEach(function (d, i) { var p = document.createElementNS(ns, 'path'); p.setAttribute('d', (i ? 'M' : '') + d); svg.appendChild(p); });
+      box.textContent = ''; box.appendChild(svg);
+    } else if (IMG_OK.test(v)) { box.textContent = ''; box.appendChild(el('img', { src: v, alt: '' })); }
+    else return;
+    box.setAttribute('data-icn', v);
+  }
+  function openPicker(box) {
+    var key = box.getAttribute('data-ic'), ov = el('div', { class: 'lightbox icon-picker', role: 'dialog', 'aria-modal': 'true', 'aria-label': 'Choisir une icône' });
+    function close() { ov.remove(); }
+    function choose(v) { dirty['icon.' + key] = v; setIcon(box, v); refresh(); close(); }
+    var grid = el('div', { class: 'ip-grid' });
+    Object.keys(ICONS).forEach(function (name) {
+      var tile = el('div', { class: 'ico' }); setIcon(tile, name);
+      var b = el('button', { type: 'button', class: 'ip-item', title: name }, tile, el('span', { text: name }));
+      b.addEventListener('click', function () { choose(name); }); grid.appendChild(b);
+    });
+    var file = el('input', { type: 'file', accept: 'image/*', class: 'cb-file' });
+    var msg = el('p', { class: 'form-msg' });
+    file.addEventListener('change', function () {
+      if (!file.files[0]) return; msg.textContent = 'Envoi de l\'image…';
+      resize(file.files[0]).then(function (d) { return LH.api('POST', '/api/admin/upload', { image: d }); })
+        .then(function (r) { choose(r.url); }).catch(function (e) { msg.className = 'form-msg err'; msg.textContent = e.message; });
+    });
+    var up = el('button', { type: 'button', class: 'cms-btn', text: '📁 Importer ma propre image' }); up.addEventListener('click', function () { file.click(); });
+    var rs = el('button', { type: 'button', class: 'cms-btn', text: 'Icône d\'origine' }); rs.addEventListener('click', function () { choose(''); });
+    var cl = el('button', { type: 'button', class: 'cms-btn primary', text: 'Fermer' }); cl.addEventListener('click', close);
+    ov.appendChild(el('div', { class: 'ip-box' }, el('h3', { text: 'Choisir une icône' }), grid, el('div', { class: 'ip-actions' }, up, rs, cl), msg, file));
+    ov.addEventListener('click', function (e) { if (e.target === ov) close(); });
+    document.body.appendChild(ov);
+  }
+
   /* ---------- liens téléphone / e-mail ---------- */
   function phoneHref(t) { var d = t.replace(/[^0-9+]/g, ''); if (/^0\d{9}$/.test(d)) d = '+33' + d.slice(1); return 'tel:' + d; }
   function syncLinks() {
@@ -26,6 +100,7 @@
     $('.cms-tools', n).forEach(function (t) { t.remove(); });
     n.removeAttribute('contenteditable'); n.setAttribute('data-item', cid); n.setAttribute('data-from', fromId);
     $('[data-k]', n).forEach(function (e) { e.setAttribute('data-k', baseKey(e.getAttribute('data-k')) + '@' + cid); if (editing) e.setAttribute('contenteditable', 'true'); });
+    $('[data-ic]', n).forEach(function (e) { e.setAttribute('data-ic', baseKey(e.getAttribute('data-ic')) + '@' + cid); });
     showNow(n); return n;
   }
   function applyLayout(col) {
@@ -109,6 +184,7 @@
       var k = e.getAttribute('data-k'), v = overrides[k]; if (v != null) e.textContent = v;
       var h = overrides['href.' + k]; if (h && SAFE_HREF.test(h) && e.tagName === 'A') e.setAttribute('href', h);
     });
+    $('[data-ic]').forEach(function (e) { var v = overrides['icon.' + e.getAttribute('data-ic')]; if (v) setIcon(e, v); });
     syncLinks();
     try { var b = JSON.parse(overrides['blocks.' + PAGE] || '[]'); blocks = Array.isArray(b) ? b.slice(0, 30) : []; } catch (e) { blocks = []; }
     renderBlocks();
@@ -135,7 +211,11 @@
     if (!e.target.closest('.cb-text')) txt = txt.replace(/\s+/g, ' ');
     document.execCommand('insertText', false, txt);
   }
-  function onClick(e) { if (e.target.closest && !e.target.closest('.adminbar') && e.target.closest('a,button')) e.preventDefault(); }
+  function onClick(e) {
+    var t = e.target; if (!t.closest || t.closest('.adminbar') || t.closest('.icon-picker')) return;
+    var ic = t.closest('.ico[data-ic]'); if (ic) { e.preventDefault(); openPicker(ic); return; }
+    if (t.closest('a,button')) e.preventDefault();
+  }
   function onFocus(e) { var a = e.target.closest && e.target.closest('a[data-k]'); if (a) lastA = a; }
   function beforeUnload(e) { if (Object.keys(dirty).length || Object.keys(colDirty).length || blocksDirty) { e.preventDefault(); e.returnValue = ''; } }
 
@@ -159,6 +239,7 @@
     var cid = 'c' + Date.now().toString(36) + Math.floor(Math.random() * 99);
     var n = makeClone(item, cid, from); n.setAttribute('data-from', from);
     $('[data-k]', n).forEach(function (e) { dirty[e.getAttribute('data-k')] = e.textContent; e.setAttribute('contenteditable', 'true'); });
+    $('[data-ic]', n).forEach(function (e) { var v = e.getAttribute('data-icn'); if (v) dirty['icon.' + e.getAttribute('data-ic')] = v; });
     decorate(n, col); item.parentNode.insertBefore(n, item.nextSibling); colDirty[col.getAttribute('data-col')] = 1; refresh();
   }
 
@@ -193,10 +274,10 @@
   function cancel() { if ((Object.keys(dirty).length || Object.keys(colDirty).length || blocksDirty) && !confirm('Annuler vos modifications non enregistrées ?')) return; dirty = {}; colDirty = {}; blocksDirty = false; location.reload(); }
   function reset() {
     if (!confirm('Rétablir cette page à son contenu d\'origine (textes, éléments ajoutés/supprimés, sections, liens, titre Google) ? Le menu et le pied de page sont aussi concernés.')) return;
-    var present = {}; $('[data-k]').forEach(function (e) { present[baseKey(e.getAttribute('data-k'))] = 1; });
+    var present = {}; $('[data-k]').forEach(function (e) { present[baseKey(e.getAttribute('data-k'))] = 1; }); $('[data-ic]').forEach(function (e) { present[baseKey(e.getAttribute('data-ic'))] = 1; });
     var keys = Object.keys(overrides).filter(function (k) {
       if (k === 'blocks.' + PAGE || k.indexOf('seo.' + PAGE + '.') === 0 || k.indexOf('layout.' + PAGE + '.') === 0) return true;
-      return !!present[baseKey(k.replace(/^href\./, ''))];
+      return !!present[baseKey(k.replace(/^(href|icon)\./, ''))];
     });
     LH.api('POST', '/api/admin/content/reset', { keys: keys }).then(function () { dirty = {}; colDirty = {}; blocksDirty = false; location.reload(); }).catch(function (err) { ui.msg.textContent = 'Erreur : ' + err.message; });
   }
