@@ -195,3 +195,15 @@ html.cms-loading [data-k]{visibility:hidden}
 .social.is-empty{display:none}
 .is-admin .social.is-empty{display:inline-flex;opacity:.55;border-style:dashed;pointer-events:none}
 .cms-editing .social.is-empty{pointer-events:auto;opacity:1}
+/* Facebook : bouton flottant + icône du menu */
+.fb-fab{position:fixed;left:18px;bottom:18px;z-index:55;display:flex;align-items:center;height:56px;min-width:56px;padding:0 17px;border-radius:30px;background:#1877f2;color:#fff;font-weight:700;font-size:.85rem;box-shadow:0 10px 25px rgba(24,119,242,.45);animation:fbpulse 2.6s infinite;transition:.3s}
+.fb-fab svg{width:22px;height:22px;fill:#fff;flex:none}
+.fb-fab .fb-label{max-width:0;overflow:hidden;white-space:nowrap;opacity:0;transition:.3s}
+.fb-fab:hover,.fb-fab:focus-visible{background:#0f63d0;padding:0 22px 0 17px}
+.fb-fab:hover .fb-label,.fb-fab:focus-visible .fb-label{max-width:160px;opacity:1;margin-left:10px}
+@keyframes fbpulse{0%{box-shadow:0 10px 25px rgba(24,119,242,.45),0 0 0 0 rgba(24,119,242,.5)}70%{box-shadow:0 10px 25px rgba(24,119,242,.45),0 0 0 16px rgba(24,119,242,0)}100%{box-shadow:0 10px 25px rgba(24,119,242,.45),0 0 0 0 rgba(24,119,242,0)}}
+.fb-head{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:#1877f2;transition:.25s}
+.fb-head svg{width:19px;height:19px;fill:#fff}.fb-head:hover{background:#0f63d0;transform:translateY(-2px)}
+.fb-fab.is-empty,.fb-head.is-empty{display:none!important}
+@media(max-width:900px){.fb-head{display:none}}
+@media(prefers-reduced-motion:reduce){.fb-fab{animation:none}}

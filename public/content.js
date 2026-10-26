@@ -86,7 +86,11 @@
   }
 
   /* ---------- réseaux sociaux : caché tant que le lien n'est pas renseigné ---------- */
-  function socials() { $('a[data-social]').forEach(function (a) { var h = a.getAttribute('href'); a.classList.toggle('is-empty', !h || h === '#'); }); }
+  function socials() {
+    var main = document.querySelector('a[data-social]'), h = main && main.getAttribute('href'), empty = !h || h === '#';
+    $('a[data-social]').forEach(function (a) { a.classList.toggle('is-empty', empty); });
+    $('a[data-social-follow]').forEach(function (a) { if (!empty) a.setAttribute('href', h); a.classList.toggle('is-empty', empty); });   // boutons flottant et menu suivent le lien du pied de page
+  }
   function cleanHref(v) {
     v = v.trim(); if (SAFE_HREF.test(v)) return v;
     return /^(www\.)?[a-z0-9-]+(\.[a-z0-9-]+)*\.[a-z]{2,}(\/|$)/i.test(v) ? 'https://' + v : null;   // « facebook.com/… » → https://facebook.com/…
