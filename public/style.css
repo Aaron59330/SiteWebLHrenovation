@@ -189,3 +189,9 @@ html.cms-loading [data-k]{visibility:hidden}
 .ip-item{display:grid;justify-items:center;gap:6px;padding:12px 6px;border:1.5px solid #e6e0d6;border-radius:12px;background:#fff;cursor:pointer;font:inherit;font-size:.7rem;font-weight:600}
 .ip-item:hover{border-color:var(--sand);background:var(--sand-l)}.ip-item .ico{width:48px;height:48px}
 .ip-actions{display:flex;gap:10px;flex-wrap:wrap}
+/* réseaux sociaux */
+.social{display:inline-flex;align-items:center;gap:10px;color:#fff;border:1.5px solid #444;padding:9px 18px;border-radius:30px;font-weight:600;font-size:.85rem;transition:.25s}
+.social svg{width:18px;height:18px;fill:currentColor}.social:hover{border-color:var(--sand);color:var(--sand)}
+.social.is-empty{display:none}
+.is-admin .social.is-empty{display:inline-flex;opacity:.55;border-style:dashed;pointer-events:none}
+.cms-editing .social.is-empty{pointer-events:auto;opacity:1}

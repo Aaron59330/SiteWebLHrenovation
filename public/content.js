@@ -85,6 +85,13 @@
     document.body.appendChild(ov);
   }
 
+  /* ---------- réseaux sociaux : caché tant que le lien n'est pas renseigné ---------- */
+  function socials() { $('a[data-social]').forEach(function (a) { var h = a.getAttribute('href'); a.classList.toggle('is-empty', !h || h === '#'); }); }
+  function cleanHref(v) {
+    v = v.trim(); if (SAFE_HREF.test(v)) return v;
+    return /^(www\.)?[a-z0-9-]+(\.[a-z0-9-]+)*\.[a-z]{2,}(\/|$)/i.test(v) ? 'https://' + v : null;   // « facebook.com/… » → https://facebook.com/…
+  }
+
   /* ---------- liens téléphone / e-mail ---------- */
   function phoneHref(t) { var d = t.replace(/[^0-9+]/g, ''); if (/^0\d{9}$/.test(d)) d = '+33' + d.slice(1); return 'tel:' + d; }
   function syncLinks() {
@@ -182,10 +189,10 @@
     $('[data-col]').forEach(applyLayout);
     $('[data-k]').forEach(function (e) {
       var k = e.getAttribute('data-k'), v = overrides[k]; if (v != null) e.textContent = v;
-      var h = overrides['href.' + k]; if (h && SAFE_HREF.test(h) && e.tagName === 'A') e.setAttribute('href', h);
+      var h = overrides['href.' + k], an = e.tagName === 'A' ? e : e.closest('a'); if (h && SAFE_HREF.test(h) && an) an.setAttribute('href', h);
     });
     $('[data-ic]').forEach(function (e) { var v = overrides['icon.' + e.getAttribute('data-ic')]; if (v) setIcon(e, v); });
-    syncLinks();
+    syncLinks(); socials();
     try { var b = JSON.parse(overrides['blocks.' + PAGE] || '[]'); blocks = Array.isArray(b) ? b.slice(0, 30) : []; } catch (e) { blocks = []; }
     renderBlocks();
     var st = overrides['seo.' + PAGE + '.title']; if (st) document.title = st;
@@ -216,7 +223,7 @@
     var ic = t.closest('.ico[data-ic]'); if (ic) { e.preventDefault(); openPicker(ic); return; }
     if (t.closest('a,button')) e.preventDefault();
   }
-  function onFocus(e) { var a = e.target.closest && e.target.closest('a[data-k]'); if (a) lastA = a; }
+  function onFocus(e) { var a = e.target.closest && e.target.closest('a'); if (a && (a.hasAttribute('data-k') || a.querySelector('[data-k]'))) lastA = a; }
   function beforeUnload(e) { if (Object.keys(dirty).length || Object.keys(colDirty).length || blocksDirty) { e.preventDefault(); e.returnValue = ''; } }
 
   function itemTools(item, col) {
@@ -283,12 +290,15 @@
   }
   function editLink() {
     if (!lastA) { alert('Cliquez d\'abord dans le texte du bouton ou du lien à modifier, puis cliquez sur « Lien ».'); return; }
-    var k = lastA.getAttribute('data-k');
+    var kEl = lastA.hasAttribute('data-k') ? lastA : lastA.querySelector('[data-k]'), k = kEl.getAttribute('data-k');
     if (k === 'contact.phone' || k === 'contact.email') { alert('Pour le téléphone et l\'e-mail, modifiez simplement le texte : le lien suit automatiquement.'); return; }
-    var cur = lastA.getAttribute('href') || '', v = prompt('Adresse du lien\n(ex. contact.html, https://…, tel:+33…, mailto:…)', cur);
-    if (v === null) return; v = v.trim();
-    if (!SAFE_HREF.test(v)) { alert('Adresse non valable. Elle doit commencer par https://, /, #, tel:, mailto: ou être une page du site (ex. contact.html).'); return; }
-    dirty['href.' + k] = v; $('[data-k="' + k + '"]').forEach(function (a) { if (a.tagName === 'A') a.setAttribute('href', v); }); refresh();
+    var cur = lastA.getAttribute('href') || ''; if (cur === '#') cur = '';
+    var v = prompt(lastA.hasAttribute('data-social') ? 'Adresse de votre page (ex. https://www.facebook.com/votrepage)' : 'Adresse du lien\n(ex. contact.html, https://…, tel:+33…, mailto:…)', cur);
+    if (v === null) return; v = cleanHref(v);
+    if (!v) { alert('Adresse non valable. Elle doit commencer par https://, /, #, tel:, mailto: ou être une page du site (ex. contact.html).'); return; }
+    dirty['href.' + k] = v;
+    $('[data-k="' + k + '"]').forEach(function (x) { var a = x.tagName === 'A' ? x : x.closest('a'); if (a) a.setAttribute('href', v); });
+    socials(); refresh();
   }
   function editSeo() {
     var metaD = document.querySelector('meta[name="description"]');
