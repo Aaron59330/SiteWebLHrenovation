@@ -259,5 +259,5 @@ html.cms-loading [data-k]{visibility:hidden}
 .ph{background:repeating-linear-gradient(135deg,#ece3d4 0 14px,#f3ecdf 14px 28px);color:var(--sand-d)}
 .ico{background:linear-gradient(135deg,var(--sand),#d2bf9f)}.ico svg{stroke:#1b1b1b}
 .tile{background:#d9ccb6}
-.tile figcaption{background:linear-gradient(transparent,rgba(24,19,12,.9));color:rgba(255,255,255,.88)}.tile figcaption b{color:#fff}
-.footer{background:#211c16;border-top:4px solid var(--sand)}
+.tile figcaption{background:linear-gradient(transparent,rgba(25,25,25,.9));color:rgba(255,255,255,.88)}.tile figcaption b{color:#fff}
+.footer{background:#191919;border-top:4px solid var(--sand)}
