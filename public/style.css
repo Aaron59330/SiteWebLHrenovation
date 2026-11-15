@@ -240,3 +240,24 @@ html.cms-loading [data-k]{visibility:hidden}
 .tile figcaption{padding:70px 20px 18px;font-size:.8rem;letter-spacing:.02em}.tile figcaption b{font-size:1.02rem;line-height:1.25;margin-bottom:3px}
 .tile figcaption::after{content:"Voir le détail →";display:block;margin-top:8px;color:#fff;font-weight:700;font-size:.74rem;opacity:0;transform:translateY(6px);transition:.3s}
 .tile:hover figcaption::after,.tile:focus-visible figcaption::after{opacity:1;transform:none}
+
+/* ===== Thème plus clair : mêmes couleurs (noir + sable du logo), moins de grands aplats noirs ===== */
+:root{--sand-l:#f6f1e9}
+.dark{background:var(--sand-l);color:var(--ink)}
+.dark .head p{color:var(--mut)}
+.dark .btn{background:var(--black);border-color:var(--black);color:#fff}.dark .btn:hover{background:var(--sand);border-color:var(--sand);color:var(--black)}
+.btn-ghost-w{color:var(--black);border-color:var(--black)}.btn-ghost-w:hover,.dark .btn-ghost-w:hover{background:var(--black);color:#fff}
+.banner{background:linear-gradient(135deg,#f4ebdd 0%,#e5d7c0 100%);color:var(--ink);padding:62px 0 54px}
+.banner::after{opacity:.3}
+.banner p{color:#5b5144}.crumb{color:var(--sand-d)}
+.cta-final{background:linear-gradient(135deg,#b49c7d,#cdb998);color:#14110d}
+.cta-final .eyebrow{color:#14110d}.cta-final .eyebrow::before{background:#14110d}.cta-final p{color:#2d261c}
+.cta-final .btn{background:var(--black);color:#fff;border-color:var(--black)}.cta-final .btn:hover{background:#fff;border-color:#fff;color:var(--black)}
+.cta-final .btn-ghost-w{background:transparent;color:var(--black);border-color:var(--black)}.cta-final .btn-ghost-w:hover{background:var(--black);color:#fff}
+.infos li{color:var(--ink)}.infos b{color:var(--sand-d)}.infos a{font-weight:600}
+.muted{color:var(--mut)}
+.ph{background:repeating-linear-gradient(135deg,#ece3d4 0 14px,#f3ecdf 14px 28px);color:var(--sand-d)}
+.ico{background:linear-gradient(135deg,var(--sand),#d2bf9f)}.ico svg{stroke:#1b1b1b}
+.tile{background:#d9ccb6}
+.tile figcaption{background:linear-gradient(transparent,rgba(24,19,12,.9));color:rgba(255,255,255,.88)}.tile figcaption b{color:#fff}
+.footer{background:#211c16;border-top:4px solid var(--sand)}
