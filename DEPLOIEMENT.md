@@ -28,7 +28,8 @@ Dans `.env`, renseignez au minimum :
 ## 3. Lancer et garder actif
 ```bash
 pm2 start server/server.js --name lhrenovation
-pm2 save && pm2 startup     # démarrage automatique après un redémarrage
+pm2 startup                 # affiche une ligne « sudo env PATH=... » : la copier et la lancer
+pm2 save                    # puis sauvegarder : le site redémarre tout seul après un redémarrage du serveur
 ```
 
 ## 4. Nginx (reverse proxy) + HTTPS
@@ -64,3 +65,27 @@ sudo certbot --nginx -d votre-domaine.fr -d www.votre-domaine.fr
 cd /var/www/lhrenovation && git pull && npm install --omit=dev && pm2 restart lhrenovation
 cp data/lh.db ~/sauvegarde-lh-$(date +%F).db     # à faire régulièrement
 ```
+
+## Sécurité du serveur (à faire dès l'installation, AVANT de mettre le site en ligne)
+Un serveur exposé à Internet reçoit en permanence des tentatives de connexion automatiques. Sans ces protections,
+un mot de passe SSH faible suffit à se faire pirater.
+
+1. **Connexion SSH par clé uniquement** (créer la clé sur votre PC : `ssh-keygen -t ed25519`, puis ajouter la clé publique
+   dans OVH lors de la réinstallation, ou avec `ssh-copy-id`). Puis désactiver le mot de passe :
+   ```bash
+   sudo sed -i 's/^#\?PasswordAuthentication.*/PasswordAuthentication no/' /etc/ssh/sshd_config
+   sudo sed -i 's/^#\?PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config
+   sudo systemctl restart ssh
+   ```
+   (Vérifier d'abord, dans une 2e fenêtre, que la connexion par clé fonctionne.)
+2. **Pare-feu** : seuls SSH, HTTP et HTTPS sont ouverts.
+   ```bash
+   sudo ufw allow OpenSSH && sudo ufw allow 'Nginx Full' && sudo ufw enable
+   ```
+3. **Blocage des tentatives répétées** et **mises à jour de sécurité automatiques** :
+   ```bash
+   sudo apt install -y fail2ban unattended-upgrades
+   sudo systemctl enable --now fail2ban
+   ```
+4. Mots de passe uniques et longs (admin du site, `.env`). Ne jamais réutiliser un mot de passe d'un autre service.
+5. **Sauvegardes** régulières de `data/` (base `lh.db` + dossier `uploads`) hors du serveur.
