@@ -208,9 +208,10 @@
 
   /* ---------- mode édition (administrateur) ---------- */
   function refresh() { if (ui.save) { var n = Object.keys(dirty).length + Object.keys(colDirty).length + (blocksDirty ? 1 : 0); ui.save.textContent = n ? 'Enregistrer (' + n + ')' : 'Enregistrer'; ui.save.disabled = !n || saving; } }
+  function plainText(node) { var c = node.cloneNode(true); $('.cms-tools', c).forEach(function (x) { x.remove(); }); return c.textContent; }
   function onInput(e) {
     var t = e.target.closest && e.target.closest('[data-k]'); if (!t) return;
-    var k = t.getAttribute('data-k'), v = t.textContent; dirty[k] = v;
+    var k = t.getAttribute('data-k'), v = plainText(t); dirty[k] = v;
     $('[data-k="' + k + '"]').forEach(function (o) { if (o !== t) o.textContent = v; });
     if (k === 'contact.phone' || k === 'contact.email') syncLinks();
     refresh();
@@ -249,7 +250,7 @@
     var src = item.getAttribute('data-from') ? col.querySelector('[data-item="' + from + '"]') || item : item;
     var cid = 'c' + Date.now().toString(36) + Math.floor(Math.random() * 99);
     var n = makeClone(item, cid, from); n.setAttribute('data-from', from);
-    $('[data-k]', n).forEach(function (e) { dirty[e.getAttribute('data-k')] = e.textContent; e.setAttribute('contenteditable', 'true'); });
+    $('[data-k]', n).forEach(function (e) { dirty[e.getAttribute('data-k')] = plainText(e); e.setAttribute('contenteditable', 'true'); });
     $('[data-ic]', n).forEach(function (e) { var v = e.getAttribute('data-icn'); if (v) dirty['icon.' + e.getAttribute('data-ic')] = v; });
     decorate(n, col); item.parentNode.insertBefore(n, item.nextSibling); colDirty[col.getAttribute('data-col')] = 1; refresh();
   }

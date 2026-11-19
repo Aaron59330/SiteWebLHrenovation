@@ -261,3 +261,18 @@ html.cms-loading [data-k]{visibility:hidden}
 .tile{background:#d9ccb6}
 .tile figcaption{background:linear-gradient(transparent,rgba(25,25,25,.9));color:rgba(255,255,255,.88)}.tile figcaption b{color:#fff}
 .footer{background:#191919;border-top:4px solid var(--sand)}
+
+/* édition : la barre d'outils ne recouvre jamais le texte (petites mentions du haut de l'accueil) */
+.cms-editing .hero-points{gap:48px 26px;margin-top:56px}
+.cms-editing .hero-points li{position:relative}
+.cms-editing .hero-points li>.cms-tools{top:auto;bottom:calc(100% + 6px);right:auto;left:0}
+
+/* téléphone : le menu replié ne doit capter aucun clic (il masquait le bandeau administrateur) */
+@media(max-width:900px){
+ .menu:not(.open-static):not(.open){visibility:hidden;pointer-events:none;transition:transform .35s,visibility 0s .35s}
+ .menu.open{visibility:visible;pointer-events:auto;transition:transform .35s}
+}
+
+/* édition : la barre d'outils d'une section ajoutée se place au-dessus de la section (jamais sur le titre) */
+.cms-editing .custom-block{display:flex;flex-direction:column;padding-top:36px}
+.cms-editing .custom-block .cb-tools{position:static;order:-1;align-self:center;margin:0 16px 26px;max-width:calc(100% - 32px);justify-content:center}
